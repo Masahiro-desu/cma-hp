@@ -23,7 +23,7 @@ export function Header() {
             alt="CMA" 
             width={100} 
             height={30}
-            className="mr-8"
+            className="mr-8 rounded-md"
           />
         </Link>
         <nav className="hidden md:flex space-x-6">

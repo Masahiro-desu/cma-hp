@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // ユーザー事例のダミーデータ
 const userExamples = [
@@ -59,7 +60,7 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 40 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
@@ -113,9 +114,11 @@ export function UserExamples() {
           transition={{ duration: 0.5, delay: 0.6 }}
           className="text-center"
         >
-          <Button variant="outline" className="rounded-full border-[#1a293f] text-[#1a293f]">
-            もっと見る →
-          </Button>
+          <Link href="/how-others-use">
+            <Button variant="outline" className="rounded-full border-[#1a293f] text-[#1a293f]">
+              もっと見る →
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

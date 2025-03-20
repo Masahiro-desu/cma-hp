@@ -13,7 +13,7 @@ const spaces = [
     creator: "Sales Team",
     rating: 5,
     uses: 124,
-    image: "/images/space-1.png"
+    image: "https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&q=80"
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const spaces = [
     creator: "Support Dept",
     rating: 4,
     uses: 87,
-    image: "/images/space-2.png"
+    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80"
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ const spaces = [
     creator: "PM Office",
     rating: 5,
     uses: 63,
-    image: "/images/space-3.png"
+    image: "https://images.unsplash.com/photo-1517245508232-9f8d10105245?auto=format&fit=crop&q=80"
   },
   {
     id: 4,
@@ -37,7 +37,7 @@ const spaces = [
     creator: "HR Team",
     rating: 4,
     uses: 52,
-    image: "/images/space-4.png"
+    image: "https://images.unsplash.com/photo-1565688534245-05d6b5be184a?auto=format&fit=crop&q=80"
   },
   {
     id: 5,
@@ -45,7 +45,7 @@ const spaces = [
     creator: "Engineering",
     rating: 5,
     uses: 98,
-    image: "/images/space-5.png"
+    image: "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&q=80"
   },
   {
     id: 6,
@@ -53,7 +53,7 @@ const spaces = [
     creator: "Marketing",
     rating: 4,
     uses: 45,
-    image: "/images/space-6.png"
+    image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80"
   },
   {
     id: 7,
@@ -61,7 +61,7 @@ const spaces = [
     creator: "Finance Dept",
     rating: 4,
     uses: 32,
-    image: "/images/space-7.png"
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80"
   },
   {
     id: 8,
@@ -69,7 +69,7 @@ const spaces = [
     creator: "R&D Team",
     rating: 5,
     uses: 76,
-    image: "/images/space-8.png"
+    image: "https://images.unsplash.com/photo-1557425955-df376b5903c8?auto=format&fit=crop&q=80"
   }
 ];
 
@@ -85,7 +85,7 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 40 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
@@ -127,6 +127,8 @@ export function SpaceGallery() {
                   alt={space.title} 
                   fill
                   className="object-cover"
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 />
               </div>
               <div className="p-4">

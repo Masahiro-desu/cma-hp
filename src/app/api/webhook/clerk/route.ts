@@ -5,10 +5,10 @@ import { supabase } from '@/lib/supabase';
 
 export async function POST(req: Request) {
   // Webhookの秘密鍵を環境変数から取得
-  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET || 'whsec_clerkwebhooksecret';
+  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
-    console.error('Webhook secret not found');
+    console.error('Webhook secretが環境変数に設定されていません。');
     return new Response('Webhook secret not found', { status: 500 });
   }
 

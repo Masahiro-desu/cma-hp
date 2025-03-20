@@ -6,6 +6,9 @@ import { SpaceGallery } from "@/components/sections/SpaceGallery";
 import { Benchmark } from "@/components/sections/Benchmark";
 import { Footer } from "@/components/sections/Footer";
 
+// ISRの設定
+export const revalidate = 3600; // 1時間ごとに再生成
+
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-white">

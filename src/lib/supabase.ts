@@ -1,8 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Supabaseクライアントの初期化
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://nualpenqlmwjwwftbgft.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51YWxwZW5xbG13and3ZnRiZ2Z0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI0NzY4MDYsImV4cCI6MjA1ODA1MjgwNn0.WYg65TmTz03Ww9Ha11ZcBqhdgUCpFNqFz5NeSSzfMoU';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+
+// 環境変数が設定されていない場合はエラーを表示
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Supabase環境変数が設定されていません。.envファイルを確認してください。');
+}
 
 // Supabaseクライアントの型定義
 interface Database {

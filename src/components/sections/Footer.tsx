@@ -21,7 +21,7 @@ export function Footer() {
               alt="CMA" 
               width={100} 
               height={30}
-              className="mb-4"
+              className="mb-4 rounded-md"
             />
             <p className="text-sm text-gray-300 max-w-xs">
               クリエイティブ・メディエーション・エージェンシー

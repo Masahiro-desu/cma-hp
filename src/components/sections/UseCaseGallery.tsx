@@ -11,49 +11,49 @@ const useCases = [
     id: 1,
     title: "社内ナレッジの活用",
     description: "蓄積された社内知識をAIに学習させ、新入社員のオンボーディングやトレーニングに活用できます。",
-    image: "/images/usecase-1.png"
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80"
   },
   {
     id: 2,
     title: "問い合わせ対応の効率化",
     description: "よくある質問や問い合わせに対して、AIが自動的に回答することで、対応時間を短縮できます。",
-    image: "/images/usecase-2.png"
+    image: "https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&q=80"
   },
   {
     id: 3,
     title: "業務マニュアルの検索",
     description: "複雑な業務マニュアルの中から必要な情報を素早く検索し、手順を簡潔に説明します。",
-    image: "/images/usecase-3.png"
+    image: "https://images.unsplash.com/photo-1544396821-4dd40b938ad3?auto=format&fit=crop&q=80"
   },
   {
     id: 4,
     title: "会議の議事録作成",
     description: "会議の内容を要約し、重要なポイントや決定事項を自動的にまとめることができます。",
-    image: "/images/usecase-4.png"
+    image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80"
   },
   {
     id: 5,
     title: "データ分析のサポート",
     description: "収集したデータの傾向や特徴を分析し、意思決定に役立つ情報を提供します。",
-    image: "/images/usecase-5.png"
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80"
   },
   {
     id: 6,
     title: "プロジェクト管理の効率化",
     description: "タスクの進捗状況を把握し、プロジェクトの遅延リスクを事前に検知します。",
-    image: "/images/usecase-6.png"
+    image: "https://images.unsplash.com/photo-1542626991-cbc4e32524cc?auto=format&fit=crop&q=80"
   },
   {
     id: 7,
     title: "営業活動のサポート",
     description: "顧客情報や過去の取引履歴を分析し、最適な提案や営業戦略を立案します。",
-    image: "/images/usecase-7.png"
+    image: "https://images.unsplash.com/photo-1552581234-26160f608093?auto=format&fit=crop&q=80"
   },
   {
     id: 8,
     title: "人材育成と評価",
     description: "社員のスキルや経験を分析し、最適な育成プランや評価基準を提案します。",
-    image: "/images/usecase-8.png"
+    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80"
   }
 ];
 
@@ -69,7 +69,7 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 40 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
@@ -118,6 +118,8 @@ export function UseCaseGallery() {
                   alt={useCase.title} 
                   fill
                   className="object-cover rounded"
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 />
               </div>
             </motion.div>

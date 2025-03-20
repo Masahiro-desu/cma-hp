@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -38,10 +39,15 @@ export function Hero() {
           transition={{ duration: 0.3 }}
         >
           <Image 
-            src="/images/manus-intro.jpg" 
-            alt="Introducing Manus" 
+            src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80" 
+            alt="Introducing Create My Agent" 
             fill
             className="object-cover"
+            quality={85}
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 50vw"
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
           />
           <motion.div 
             className="absolute inset-0 flex items-center justify-center"
@@ -65,9 +71,11 @@ export function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
       >
-        <Button className="bg-[#1a293f] hover:bg-[#1a293f]/90 text-white rounded-full">
-          CMAを見る
-        </Button>
+        <Link href="/cma-space">
+          <Button className="bg-[#1a293f] hover:bg-[#1a293f]/90 text-white rounded-full">
+            CMAを見る
+          </Button>
+        </Link>
       </motion.div>
     </section>
   );

@@ -3,6 +3,9 @@ import { currentUser } from '@clerk/nextjs';
 import { ProfileForm } from '@/components/profile/profile-form';
 import { supabase } from '@/lib/supabase';
 
+// 動的レンダリング（ユーザーデータに依存するため）
+export const dynamic = 'force-dynamic';
+
 export default async function ProfilePage() {
   const user = await currentUser();
   

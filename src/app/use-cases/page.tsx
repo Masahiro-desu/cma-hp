@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+// ISRの設定
+export const revalidate = 3600; // 1時間ごとに再生成
+
 export default function UseCasesPage() {
   return (
     <div className="container mx-auto py-16 px-4">
