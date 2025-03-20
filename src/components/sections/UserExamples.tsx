@@ -74,9 +74,9 @@ export function UserExamples() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl font-semibold mb-4">他の人がManusをどのように使っているか見てみましょう</h2>
+          <h2 className="text-2xl font-semibold mb-4">他の人がCMAをどのように使っているか見てみましょう</h2>
           <p className="text-[#798BA6] max-w-2xl mx-auto">
-            さまざまな組織や個人がManusをどのように活用しているかをご紹介します。あなたの使い方のヒントになるかもしれません。
+            さまざまな組織や個人がCMAをどのように活用しているかをご紹介します。あなたの使い方のヒントになるかもしれません。
           </p>
         </motion.div>
         

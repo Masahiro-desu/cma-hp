@@ -99,9 +99,9 @@ export function SpaceGallery() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl font-semibold mb-4">Manus Space ギャラリー</h2>
+          <h2 className="text-2xl font-semibold mb-4">CMA Space ギャラリー</h2>
           <p className="text-[#798BA6] max-w-2xl mx-auto">
-            Manusで作成されたさまざまなスペースをご紹介します。あなたのプロジェクトの参考になるかもしれません。
+            CMAで作成されたさまざまなスペースをご紹介します。あなたのプロジェクトの参考になるかもしれません。
           </p>
         </motion.div>
         

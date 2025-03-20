@@ -79,7 +79,7 @@ export function Footer() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="pt-8 border-t border-gray-700 text-sm text-gray-300 flex flex-col md:flex-row justify-between items-center"
         >
-          <p>© 2024 Manus, Inc. All rights reserved.</p>
+          <p>© 2024 CMA, Inc. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="hover:text-white transition-colors">利用規約</a>
             <a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a>

@@ -85,7 +85,7 @@ export function UseCaseGallery() {
         >
           <h2 className="text-2xl font-semibold mb-4">ユースケースギャラリー</h2>
           <p className="text-[#798BA6] max-w-2xl mx-auto">
-            メモリからメッセージまで、様々なManusの使用例を通して、あなたのチームがどのように活用できるかをご紹介します。
+            メモリからメッセージまで、様々なCMAの使用例を通して、あなたのチームがどのように活用できるかをご紹介します。
           </p>
         </motion.div>
         

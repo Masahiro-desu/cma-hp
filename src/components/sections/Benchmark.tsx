@@ -37,7 +37,7 @@ export function Benchmark() {
         >
           <h2 className="text-2xl font-semibold mb-4">ベンチマーク</h2>
           <p className="text-[#798BA6] max-w-2xl mx-auto">
-            Manusの一般的なAIチャットボットと比較した際のパフォーマンスをご紹介します。
+            CMAの一般的なAIチャットボットと比較した際のパフォーマンスをご紹介します。
             カスタマイズされたナレッジベースを活用することで、より的確な回答を提供します。
           </p>
         </motion.div>

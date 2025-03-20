@@ -13,7 +13,7 @@ export function Hero() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="text-4xl font-semibold mb-4"
       >
-        Leave it to Manus
+        Create My Agent
       </motion.h1>
       <motion.p 
         initial={{ opacity: 0 }}
@@ -21,8 +21,8 @@ export function Hero() {
         transition={{ duration: 0.5, delay: 0.4 }}
         className="text-[#798BA6] max-w-2xl mx-auto mb-12"
       >
-        MANUS は、あなたの知識や手順をAIにインプットし、チームメンバーの作業を効率化するためのAIアシスタントです。
-        社内の情報共有や業務効率化をサポートします。
+        もっと多くの人がアイデアを形にする世の中へ。
+        CMAは、MVPの開発補助・業務効率化ツールの提供・AIの最新情報発信を通してあなたのアイデアを30分で形にするサービスです。
       </motion.p>
       
       {/* 動画/イメージセクション */}
@@ -55,7 +55,7 @@ export function Hero() {
             </div>
           </motion.div>
           <div className="absolute bottom-0 left-0 p-6 text-white">
-            <h2 className="text-2xl font-semibold">Introducing<br />Manus</h2>
+            <h2 className="text-2xl font-semibold">Introducing<br />Create My Agent</h2>
           </div>
         </motion.div>
       </motion.div>
@@ -66,7 +66,7 @@ export function Hero() {
         transition={{ duration: 0.5, delay: 0.8 }}
       >
         <Button className="bg-[#1a293f] hover:bg-[#1a293f]/90 text-white rounded-full">
-          Manusを見る
+          CMAを見る
         </Button>
       </motion.div>
     </section>
