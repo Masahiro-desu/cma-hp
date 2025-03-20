@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export function Footer() {
   return (
@@ -16,8 +17,8 @@ export function Footer() {
             className="mb-6 md:mb-0"
           >
             <Image 
-              src="/images/manus-logo-white.png" 
-              alt="Manus" 
+              src="/logo.gif" 
+              alt="CMA" 
               width={100} 
               height={30}
               className="mb-4"
@@ -36,9 +37,9 @@ export function Footer() {
             >
               <h3 className="font-medium mb-4">プロダクト</h3>
               <ul className="space-y-2 text-sm text-gray-300">
-                <li><a href="#" className="hover:text-white transition-colors">機能</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">料金</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">活用例</a></li>
+                <li><Link href="#" className="hover:text-white transition-colors">機能</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">料金</Link></li>
+                <li><Link href="/use-cases" className="hover:text-white transition-colors">活用例</Link></li>
               </ul>
             </motion.div>
             
@@ -50,9 +51,9 @@ export function Footer() {
             >
               <h3 className="font-medium mb-4">企業情報</h3>
               <ul className="space-y-2 text-sm text-gray-300">
-                <li><a href="#" className="hover:text-white transition-colors">会社概要</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">ブログ</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">採用情報</a></li>
+                <li><Link href="#" className="hover:text-white transition-colors">会社概要</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">ブログ</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">採用情報</Link></li>
               </ul>
             </motion.div>
             
@@ -64,9 +65,9 @@ export function Footer() {
             >
               <h3 className="font-medium mb-4">リソース</h3>
               <ul className="space-y-2 text-sm text-gray-300">
-                <li><a href="#" className="hover:text-white transition-colors">ドキュメント</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">サポート</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">お問い合わせ</a></li>
+                <li><Link href="#" className="hover:text-white transition-colors">ドキュメント</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">サポート</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">お問い合わせ</Link></li>
               </ul>
             </motion.div>
           </div>
@@ -81,8 +82,8 @@ export function Footer() {
         >
           <p>© 2024 CMA, Inc. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-white transition-colors">利用規約</a>
-            <a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a>
+            <Link href="#" className="hover:text-white transition-colors">利用規約</Link>
+            <Link href="#" className="hover:text-white transition-colors">プライバシーポリシー</Link>
           </div>
         </motion.div>
       </div>

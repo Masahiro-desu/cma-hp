@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // ユースケースのダミーデータ
 const useCases = [
@@ -130,9 +131,11 @@ export function UseCaseGallery() {
           transition={{ duration: 0.5, delay: 0.6 }}
           className="text-center"
         >
-          <Button variant="outline" className="rounded-full border-[#1a293f] text-[#1a293f]">
-            すべてのユースケースを見る →
-          </Button>
+          <Link href="/use-cases">
+            <Button variant="outline" className="rounded-full border-[#1a293f] text-[#1a293f]">
+              すべてのユースケースを見る →
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>
