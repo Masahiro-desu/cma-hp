@@ -20,7 +20,7 @@ export default function HowOthersUsePage() {
               </div>
             </div>
             <blockquote className="text-lg italic text-[#1a293f] mb-6">
-              "CMAを使うことで業務効率が大幅に向上しました。特に〇〇の機能が非常に役立っています。"
+              &ldquo;CMAを使うことで業務効率が大幅に向上しました。特に〇〇の機能が非常に役立っています。&rdquo;
             </blockquote>
             <p className="text-[#798BA6]">
               具体的な活用方法や成果についての詳細な説明がここに入ります。CMAの特定の機能がどのように問題解決に貢献したかなど。
