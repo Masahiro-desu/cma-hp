@@ -24,7 +24,7 @@ export function Footer() {
               className="mb-4"
             />
             <p className="text-sm text-gray-300 max-w-xs">
-              社内の知識をAIにインプットし、チームの業務効率を向上させるプラットフォーム
+              クリエイティブ・メディエーション・エージェンシー
             </p>
           </motion.div>
           
@@ -35,11 +35,11 @@ export function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              <h3 className="font-medium mb-4">プロダクト</h3>
+              <h3 className="font-medium mb-4">会社情報</h3>
               <ul className="space-y-2 text-sm text-gray-300">
-                <li><Link href="#" className="hover:text-white transition-colors">機能</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">料金</Link></li>
-                <li><Link href="/use-cases" className="hover:text-white transition-colors">活用例</Link></li>
+                <li><Link href="/about" className="hover:text-white transition-colors">会社概要</Link></li>
+                <li><Link href="/team" className="hover:text-white transition-colors">チーム</Link></li>
+                <li><Link href="/careers" className="hover:text-white transition-colors">採用情報</Link></li>
               </ul>
             </motion.div>
             
@@ -49,11 +49,11 @@ export function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <h3 className="font-medium mb-4">企業情報</h3>
+              <h3 className="font-medium mb-4">サービス</h3>
               <ul className="space-y-2 text-sm text-gray-300">
-                <li><Link href="#" className="hover:text-white transition-colors">会社概要</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">ブログ</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">採用情報</Link></li>
+                <li><Link href="/services/planning" className="hover:text-white transition-colors">広告プランニング</Link></li>
+                <li><Link href="/services/digital" className="hover:text-white transition-colors">デジタルマーケティング</Link></li>
+                <li><Link href="/services/creative" className="hover:text-white transition-colors">クリエイティブ制作</Link></li>
               </ul>
             </motion.div>
             
@@ -65,9 +65,9 @@ export function Footer() {
             >
               <h3 className="font-medium mb-4">リソース</h3>
               <ul className="space-y-2 text-sm text-gray-300">
-                <li><Link href="#" className="hover:text-white transition-colors">ドキュメント</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">サポート</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">お問い合わせ</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">お問い合わせ</Link></li>
+                <li><Link href="/terms" className="hover:text-white transition-colors">利用規約</Link></li>
+                <li><Link href="/privacy" className="hover:text-white transition-colors">プライバシーポリシー</Link></li>
               </ul>
             </motion.div>
           </div>
@@ -80,10 +80,10 @@ export function Footer() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="pt-8 border-t border-gray-700 text-sm text-gray-300 flex flex-col md:flex-row justify-between items-center"
         >
-          <p>© 2024 CMA, Inc. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} CMA, Inc. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link href="#" className="hover:text-white transition-colors">利用規約</Link>
-            <Link href="#" className="hover:text-white transition-colors">プライバシーポリシー</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">利用規約</Link>
+            <Link href="/privacy" className="hover:text-white transition-colors">プライバシーポリシー</Link>
           </div>
         </motion.div>
       </div>
