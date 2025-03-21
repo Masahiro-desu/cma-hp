@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Image from "next/image";
 
 // ビフォーアフターのデータ
 const beforeAfterData = [
@@ -45,121 +46,107 @@ const beforeAfterData = [
 
 export function BeforeAfter() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const data = beforeAfterData[currentIndex];
   
-  const navigateCarousel = (direction: 'prev' | 'next') => {
-    setCurrentIndex(prev => {
-      if (direction === 'next') {
-        return prev === beforeAfterData.length - 1 ? 0 : prev + 1;
-      } else {
-        return prev === 0 ? beforeAfterData.length - 1 : prev - 1;
-      }
-    });
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % beforeAfterData.length);
   };
   
-  const data = beforeAfterData[currentIndex];
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + beforeAfterData.length) % beforeAfterData.length);
+  };
 
   return (
-    <section className="py-12 bg-gradient-to-b from-white to-gray-50">
+    <section className="py-16 bg-gray-50" id="before-after">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <h2 className="text-3xl font-semibold mb-4 text-[#1a293f]">{data.title}</h2>
-        </motion.div>
-        <div className="relative max-w-6xl mx-auto">
-          {/* カルーセルのナビゲーションボタン */}
-          <button
-            onClick={() => navigateCarousel('prev')}
-            className="absolute left-[-30px] top-1/2 -translate-y-1/2 z-10 bg-[#1a5393] p-3 rounded-md shadow-md hover:bg-[#1a5393]/90 transition-all duration-300 focus:outline-none"
-            aria-label="前のスライド"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 19L8 12L15 5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          
-          <button
-            onClick={() => navigateCarousel('next')}
-            className="absolute right-[-30px] top-1/2 -translate-y-1/2 z-10 bg-[#1a5393] p-3 rounded-md shadow-md hover:bg-[#1a5393]/90 transition-all duration-300 focus:outline-none"
-            aria-label="次のスライド"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 5L16 12L9 19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
 
-          <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mb-8"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Before */}
-              <div className="bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                <div className="bg-[#1a293f]/10 p-4">
-                  <h4 className="text-xl font-medium text-[#1a293f] text-center">{data.beforeTitle}</h4>
+        <div className="relative max-w-6xl mx-auto">
+          <div className="mb-8 text-center">
+            <h3 className="text-2xl font-semibold mb-2">{data.title}</h3>
+          </div>
+        
+          <div className="flex flex-col md:flex-row gap-8 justify-center">
+            {/* Before */}
+            <div className="bg-white rounded-xl overflow-hidden shadow-md flex-1 max-w-md">
+              <div className="bg-[#1a293f]/10 p-4">
+                <h4 className="text-xl font-medium text-[#1a293f] text-center">{data.beforeTitle}</h4>
+              </div>
+              <div className="relative h-60 w-full">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1a293f]/80 to-transparent z-10 flex items-end">
+                  <p className="text-white p-6 text-sm">{data.beforeDesc}</p>
                 </div>
-                <div className="relative h-64 w-full">
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1a293f]/80 to-transparent z-10 flex items-end">
-                    <p className="text-white p-6 text-sm">{data.beforeDesc}</p>
-                  </div>
-                  <div className="w-full h-full">
-                    <img 
-                      src={data.beforeImage}
-                      alt={`${data.beforeTitle} - ${data.title}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="p-5">
-                  <p className="text-red-500 text-center font-medium">{data.beforeState}</p>
+                <div className="w-full h-full relative">
+                  <Image 
+                    src={data.beforeImage}
+                    alt={`${data.beforeTitle} - ${data.title}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
                 </div>
               </div>
-
-              {/* After */}
-              <div className="bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                <div className="bg-[#1a293f] p-4">
-                  <h4 className="text-xl font-medium text-white text-center">{data.afterTitle}</h4>
-                </div>
-                <div className="relative h-64 w-full">
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1a293f]/80 to-transparent z-10 flex items-end">
-                    <p className="text-white p-6 text-sm">{data.afterDesc}</p>
-                  </div>
-                  <div className="w-full h-full">
-                    <img 
-                      src={data.afterImage}
-                      alt={`${data.afterTitle} - ${data.title}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="p-5">
-                  <p className="text-green-500 text-center font-medium">{data.afterState}</p>
-                </div>
+              <div className="p-5">
+                <p className="text-red-500 text-center font-medium">{data.beforeState}</p>
               </div>
             </div>
-          </motion.div>
 
-          {/* カルーセルインジケーター */}
-          <div className="flex justify-center gap-2">
+            {/* After */}
+            <div className="bg-white rounded-xl overflow-hidden shadow-md flex-1 max-w-md">
+              <div className="bg-[#1a293f] p-4">
+                <h4 className="text-xl font-medium text-white text-center">{data.afterTitle}</h4>
+              </div>
+              <div className="relative h-60 w-full">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1a293f]/80 to-transparent z-10 flex items-end">
+                  <p className="text-white p-6 text-sm">{data.afterDesc}</p>
+                </div>
+                <div className="w-full h-full relative">
+                  <Image 
+                    src={data.afterImage}
+                    alt={`${data.afterTitle} - ${data.title}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+              </div>
+              <div className="p-5">
+                <p className="text-green-500 text-center font-medium">{data.afterState}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-center mt-8 gap-2">
             {beforeAfterData.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? "bg-[#1a293f] w-4" : "bg-gray-300"
+                className={`w-3 h-3 rounded-full ${
+                  index === currentIndex ? "bg-[#1a293f]" : "bg-gray-300"
                 }`}
-                aria-label={`スライド ${index + 1}に移動`}
+                aria-label={`Go to slide ${index + 1}`}
               />
             ))}
           </div>
+          
+          <button
+            onClick={prevSlide}
+            className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-8 bg-white rounded-full p-3 shadow-md hover:bg-gray-100"
+            aria-label="Previous slide"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 19L8 12L15 5" stroke="#1a293f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          
+          <button
+            onClick={nextSlide}
+            className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-8 bg-white rounded-full p-3 shadow-md hover:bg-gray-100"
+            aria-label="Next slide"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 5L16 12L9 19" stroke="#1a293f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
       </div>
     </section>

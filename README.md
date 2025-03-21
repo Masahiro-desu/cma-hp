@@ -20,6 +20,33 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Environment Variables
+
+This project requires several environment variables to function properly. Create a `.env.local` file in the root directory with the following variables:
+
+```bash
+# Clerk秘密鍵
+CLERK_SECRET_KEY=your_clerk_secret_key
+
+# Stripe秘密鍵
+STRIPE_SECRET_KEY=your_stripe_secret_key
+
+# Supabase秘密鍵
+SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+For Vercel deployment, set these environment variables in your Vercel project settings:
+
+1. Go to your project on the Vercel dashboard
+2. Navigate to Settings > Environment Variables
+3. Add the following environment variables:
+   - `SUPABASE_URL` (from your `.env` file)
+   - `SUPABASE_ANON_KEY` (from your `.env.local` file)
+   - `CLERK_SECRET_KEY` (from your `.env.local` file)
+   - `STRIPE_SECRET_KEY` (from your `.env.local` file)
+   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` (from your `.env` file)
+   - `STRIPE_PUBLISHABLE_KEY` (from your `.env` file)
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
