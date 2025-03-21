@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
@@ -36,7 +36,18 @@ export interface Database {
   };
 }
 
-let supabaseClient: any;
+// ダミークライアントの型定義
+interface DummySupabaseClient {
+  from: (table: string) => {
+    select: () => { data: null; error: Error };
+  };
+  auth: {
+    signUp: () => { data: null; error: Error };
+    signIn: () => { data: null; error: Error };
+  };
+}
+
+let supabaseClient: SupabaseClient<Database> | DummySupabaseClient;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Supabase環境変数が設定されていません。.envと.env.localファイルを確認してください。');
