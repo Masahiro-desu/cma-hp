@@ -22,8 +22,9 @@ export function Hero() {
         transition={{ duration: 0.5, delay: 0.4 }}
         className="text-[#798BA6] max-w-2xl mx-auto mb-12"
       >
-        もっと多くの人がアイデアを形にする世の中へ。
-        CMAは、MVPの開発補助・業務効率化ツールの提供・AIの最新情報発信を通してあなたのアイデアを30分で形にするサービスです。
+        もっと多くの人がアイデアを形にする世の中へ。<br />
+        CMAは、MVPの開発補助・業務効率化ツールの提供・AIの最新情報発信を通して<br />
+        あなたのアイデアを30分以内に形にします。
       </motion.p>
       
       {/* 動画/イメージセクション */}
@@ -71,11 +72,19 @@ export function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
       >
-        <Link href="/cma-space">
-          <Button className="bg-[#1a293f] hover:bg-[#1a293f]/90 text-white rounded-full">
-            CMAを見る
-          </Button>
-        </Link>
+        <a href="https://buy.stripe.com/test_fZe7tRfJ588LdnG000" target="_blank" rel="noopener noreferrer">
+          <motion.div
+            whileHover={{ scale: 1.08 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Button 
+              size="lg" 
+              className="bg-[#1a293f] hover:bg-[#1a293f]/90 text-white rounded-lg px-10 py-7 text-lg font-medium shadow-lg"
+            >
+              CMAを試す
+            </Button>
+          </motion.div>
+        </a>
       </motion.div>
     </section>
   );

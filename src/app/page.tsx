@@ -1,8 +1,8 @@
 import { Header } from "@/components/sections/Header";
 import { Hero } from "@/components/sections/Hero";
+import { BeforeAfter } from "@/components/sections/BeforeAfter";
 import { UseCaseGallery } from "@/components/sections/UseCaseGallery";
 import { UserExamples } from "@/components/sections/UserExamples";
-import { SpaceGallery } from "@/components/sections/SpaceGallery";
 import { Benchmark } from "@/components/sections/Benchmark";
 import { Footer } from "@/components/sections/Footer";
 
@@ -15,9 +15,9 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
+        <BeforeAfter />
         <UseCaseGallery />
         <UserExamples />
-        <SpaceGallery />
         <Benchmark />
       </main>
       <Footer />

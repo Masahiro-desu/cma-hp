@@ -1,25 +1,14 @@
 'use client';
 
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 // ベンチマークデータ
 const benchmarks = [
   {
     id: 1,
-    name: "GPT-4 Benchmark",
+    name: "今月の残り入学枠",
     score: 84,
-    color: "bg-gray-500"
-  },
-  {
-    id: 2,
-    name: "Claude",
-    score: 78,
-    color: "bg-gray-500"
-  },
-  {
-    id: 3,
-    name: "Manus",
-    score: 95,
     color: "bg-[#1a293f]"
   }
 ];
@@ -35,10 +24,10 @@ export function Benchmark() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl font-semibold mb-4">ベンチマーク</h2>
+          <h2 className="text-2xl font-semibold mb-4">今月の残り入学枠</h2>
           <p className="text-[#798BA6] max-w-2xl mx-auto">
-            CMAの一般的なAIチャットボットと比較した際のパフォーマンスをご紹介します。
-            カスタマイズされたナレッジベースを活用することで、より的確な回答を提供します。
+            毎月100名の枠があります。<br />
+            定員に達し次第、募集終了です。
           </p>
         </motion.div>
         
@@ -77,6 +66,29 @@ export function Benchmark() {
             </motion.div>
           ))}
         </div>
+        
+        {/* CMAを試すボタン */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="text-center mt-16"
+        >
+          <a href="https://buy.stripe.com/test_fZe7tRfJ588LdnG000" target="_blank" rel="noopener noreferrer">
+            <motion.div
+              whileHover={{ scale: 1.08 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Button 
+                size="lg" 
+                className="bg-[#1a293f] hover:bg-[#1a293f]/90 text-white rounded-lg px-10 py-7 text-lg font-medium shadow-lg"
+              >
+                CMAを試す
+              </Button>
+            </motion.div>
+          </a>
+        </motion.div>
       </div>
     </section>
   );

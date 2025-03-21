@@ -1,6 +1,6 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
-import { WebhookEvent } from '@clerk/nextjs/server';
+import { UserJSON, WebhookEvent } from '@clerk/nextjs/server';
 import { supabase } from '@/lib/supabase';
 
 export async function POST(req: Request) {
@@ -14,9 +14,9 @@ export async function POST(req: Request) {
 
   // リクエストヘッダーを取得
   const headersList = headers();
-  const svix_id = headersList.get('svix-id');
-  const svix_timestamp = headersList.get('svix-timestamp');
-  const svix_signature = headersList.get('svix-signature');
+  const svix_id = (await headersList).get('svix-id');
+  const svix_timestamp = (await headersList).get('svix-timestamp');
+  const svix_signature = (await headersList).get('svix-signature');
 
   // 必要なヘッダーが不足している場合はエラー
   if (!svix_id || !svix_timestamp || !svix_signature) {
@@ -53,11 +53,11 @@ export async function POST(req: Request) {
 
   // ユーザーが作成またはサインインしたとき
   if (type === 'user.created' || type === 'session.created') {
-    const { id, email_addresses, username, first_name, last_name, image_url } = eventData;
+    const eventDataAsUser = evt.data as UserJSON;
+    const { id, email_addresses, username, first_name, last_name, image_url } = eventDataAsUser;
 
     // メールアドレスを取得
     const email = email_addresses?.[0]?.email_address || '';
-    
     if (!email) {
       console.error('Email not found in user data');
       return new Response('Email not found in user data', { status: 400 });
@@ -130,11 +130,12 @@ export async function POST(req: Request) {
 
   // ユーザー情報が更新されたとき
   if (type === 'user.updated') {
-    const { id, email_addresses, username, first_name, last_name, image_url } = eventData;
+    const { id } = eventData;
+    const userData = eventData as UserJSON;
+    const { email_addresses, username, first_name, last_name, image_url } = userData;
 
     // メールアドレスを取得
     const email = email_addresses?.[0]?.email_address;
-    
     if (!email) {
       console.error('Email not found in user data');
       return new Response('Email not found in user data', { status: 400 });

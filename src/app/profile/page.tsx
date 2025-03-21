@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
-import { currentUser } from '@clerk/nextjs';
 import { ProfileForm } from '@/components/profile/profile-form';
 import { supabase } from '@/lib/supabase';
+import { currentUser } from '@clerk/nextjs/server';
 
 // 動的レンダリング（ユーザーデータに依存するため）
 export const dynamic = 'force-dynamic';

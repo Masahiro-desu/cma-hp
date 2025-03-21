@@ -53,7 +53,6 @@ const container = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
       delayChildren: 0.3
     }
   }
@@ -77,7 +76,7 @@ export function UserExamples() {
         >
           <h2 className="text-2xl font-semibold mb-4">他の人がCMAをどのように使っているか見てみましょう</h2>
           <p className="text-[#798BA6] max-w-2xl mx-auto">
-            さまざまな組織や個人がCMAをどのように活用しているかをご紹介します。あなたの使い方のヒントになるかもしれません。
+            さまざまな組織や個人がCMAをどのように活用しているかをご紹介します。<br />
           </p>
         </motion.div>
         
