@@ -1,4 +1,22 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
+
+// 実装済みのパスを定義
+const implementedRoutes = [
+  "/", 
+  "/api/webhook(.*)", 
+  "/api(.*)", 
+  "/login", 
+  "/signup", 
+  "/about", 
+  "/contact", 
+  "/terms(.*)", 
+  "/privacy-policy(.*)",
+  "/legal(.*)",
+  "/profile(.*)",
+  "/how-others-use(.*)",
+  "/use-cases(.*)"
+];
 
 // パブリックルートのマッチャーを作成
 const publicRoutes = createRouteMatcher([
@@ -9,11 +27,22 @@ const publicRoutes = createRouteMatcher([
   "/signup", 
   "/about", 
   "/contact", 
-  "/terms", 
-  "/privacy"
+  "/terms(.*)", 
+  "/privacy-policy(.*)",
+  "/legal(.*)",
+  "/how-others-use(.*)",
+  "/use-cases(.*)"
 ]);
 
+// 実装済みルートのマッチャーを作成
+const implementedRoutesPattern = createRouteMatcher(implementedRoutes);
+
 export default clerkMiddleware(async (auth, req) => {
+  // 実装されていないページをトップページにリダイレクト
+  if (!implementedRoutesPattern(req)) {
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+  
   if (publicRoutes(req)) {
     return; // パブリックルートはそのまま通す
   }
