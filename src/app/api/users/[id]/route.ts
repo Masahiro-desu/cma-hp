@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 
 export async function GET(
   request: NextRequest,
-  { params, searchParams }: { params: { id: string }; searchParams: URLSearchParams }
+  { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
     // 認証チェック
@@ -13,7 +13,8 @@ export async function GET(
       return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
     }
 
-    // searchParamsから必要なパラメータを取得
+    // searchParamsはrequest.nextUrl.searchParamsから取得
+    const searchParams = request.nextUrl.searchParams;
     const fields = searchParams.get("fields")?.split(",") || [];
     const includePassword = searchParams.get("includePassword") === "true";
 
