@@ -1,10 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prismaClient";
-import { auth } from "@clerk/nextjs/server";
-
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
     // 認証チェック
@@ -18,11 +14,10 @@ export async function GET(
     const fields = searchParams.get("fields")?.split(",") || [];
     const includePassword = searchParams.get("includePassword") === "true";
 
-    // paramsからユーザーIDを取得
-    const { id } = params;
+    // await して params を解決する
+    const { id } = await params;
 
     // ユーザー情報を取得（管理者向けAPI）
-    // 本番環境では適切な権限チェックを追加すること
     const user = await prisma.user_db.findUnique({
       where: { user_id: id },
       ...(fields.length > 0 && {
