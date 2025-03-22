@@ -56,15 +56,15 @@ export function BeforeAfter() {
   };
 
   return (
-    <section className="py-16 bg-gray-50" id="before-after">
+    <section className="py-16" id="before-after">
       <div className="container mx-auto px-4">
 
         <div className="relative max-w-6xl mx-auto">
           <div className="mb-8 text-center">
-            <h3 className="text-2xl font-semibold mb-2">{data.title}</h3>
+            <h3 className="text-4xl font-semibold">{data.title}</h3>
           </div>
         
-          <div className="flex flex-col md:flex-row gap-8 justify-center">
+          <div className="flex flex-col md:flex-row gap-8 justify-center pt-10">
             {/* Before */}
             <div className="bg-white rounded-xl overflow-hidden shadow-md flex-1 max-w-md">
               <div className="bg-[#1a293f]/10 p-4">

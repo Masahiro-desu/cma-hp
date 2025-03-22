@@ -74,7 +74,7 @@ const item = {
 
 export function UseCaseGallery() {
   return (
-    <section className="bg-gray-50 py-16">
+    <section className="py-16">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -83,7 +83,7 @@ export function UseCaseGallery() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl font-semibold mb-4">ユースケースギャラリー</h2>
+          <h2 className="text-4xl font-semibold mb-4">ユースケースギャラリー</h2>
           <p className="text-[#798BA6] max-w-2xl mx-auto">
             CMAの使用例を通して<br />
             あなたがどのようにアイデアを形にするかご紹介します。
