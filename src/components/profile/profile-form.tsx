@@ -4,17 +4,18 @@ import { useState } from 'react';
 import { User } from '@clerk/nextjs/server';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/prismaClient';
+
+interface UserData {
+  user_id: string;
+  email: string;
+  user_name: string | null;
+  device_type: string | null;
+  created_at: Date;
+  updated_at: Date;
+}
 
 interface ProfileFormProps {
-  user: {
-    id: string;
-    email: string;
-    user_name: string;
-    display_name: string | null;
-    bio: string | null;
-    profile_image_url: string | null;
-  } | null;
+  user: UserData | null;
   clerkUser: User;
 }
 
@@ -23,8 +24,6 @@ export function ProfileForm({ user, clerkUser }: ProfileFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     user_name: user?.user_name || '',
-    display_name: user?.display_name || '',
-    bio: user?.bio || '',
   });
 
   // 入力フィールドの変更を処理
@@ -42,18 +41,19 @@ export function ProfileForm({ user, clerkUser }: ProfileFormProps) {
     setIsLoading(true);
     
     try {
-      // Supabaseにプロフィール情報を更新
-      const { error } = await supabase
-        .from('users')
-        .update({
+      // Prismaでプロフィール情報を更新
+      const response = await fetch(`/api/users/${user.user_id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           user_name: formData.user_name,
-          display_name: formData.display_name,
-          bio: formData.bio,
-        })
-        .eq('id', user.id);
-      
-      if (error) {
-        throw error;
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update profile');
       }
       
       // 成功時にページをリフレッシュ
@@ -83,12 +83,12 @@ export function ProfileForm({ user, clerkUser }: ProfileFormProps) {
         ) : (
           <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center">
             <span className="text-2xl font-bold text-muted-foreground">
-              {formData.display_name?.[0]?.toUpperCase() || formData.user_name[0]?.toUpperCase() || 'U'}
+              {formData.user_name[0]?.toUpperCase() || 'U'}
             </span>
           </div>
         )}
         <div>
-          <h2 className="text-xl font-medium">{formData.display_name || formData.user_name}</h2>
+          <h2 className="text-xl font-medium">{formData.user_name}</h2>
           <p className="text-sm text-muted-foreground">{user?.email}</p>
         </div>
       </div>
@@ -112,57 +112,14 @@ export function ProfileForm({ user, clerkUser }: ProfileFormProps) {
           </p>
         </div>
 
-        <div className="space-y-2">
-          <label htmlFor="display_name" className="block text-sm font-medium">
-            表示名
-          </label>
-          <input
-            id="display_name"
-            name="display_name"
-            type="text"
-            value={formData.display_name}
-            onChange={handleChange}
-            className="w-full rounded-md border border-input px-3 py-2 text-sm"
-          />
-          <p className="text-xs text-muted-foreground">
-            あなたのフルネームまたは表示したい名前
-          </p>
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="bio" className="block text-sm font-medium">
-            自己紹介
-          </label>
-          <textarea
-            id="bio"
-            name="bio"
-            rows={4}
-            value={formData.bio}
-            onChange={handleChange}
-            className="w-full rounded-md border border-input px-3 py-2 text-sm"
-          />
-          <p className="text-xs text-muted-foreground">
-            あなた自身について簡単な説明
-          </p>
-        </div>
-
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-          >
-            {isLoading ? '更新中...' : '保存する'}
-          </button>
-        </div>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full px-4 py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-primary/90 disabled:opacity-50"
+        >
+          {isLoading ? '更新中...' : 'プロフィールを更新'}
+        </button>
       </form>
-
-      <div className="border-t pt-6">
-        <p className="text-sm text-muted-foreground">
-          プロフィール画像はClerkで管理されています。
-          画像を変更するには、ユーザーメニューから設定を開いてください。
-        </p>
-      </div>
     </div>
   );
 } 

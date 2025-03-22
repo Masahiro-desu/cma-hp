@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prismaClient";
 import { auth } from "@clerk/nextjs/server";
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -32,8 +32,10 @@ export async function GET(
       );
     }
 
-    // 機密情報を削除して返す
-    const { password_hash, ...safeUser } = user;
+    // 機密情報を除外して返却
+    const safeUser = Object.fromEntries(
+      Object.entries(user).filter(([key]) => key !== 'password_hash')
+    );
     
     return NextResponse.json(safeUser);
   } catch (error) {

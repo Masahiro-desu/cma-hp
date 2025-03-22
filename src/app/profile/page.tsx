@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { ProfileForm } from '@/components/profile/profile-form';
-import { supabase } from '@/lib/prismaClient';
+import { prisma } from '@/lib/prismaClient';
 import { currentUser } from '@clerk/nextjs/server';
 
 // 動的レンダリング（ユーザーデータに依存するため）
@@ -13,44 +13,31 @@ export default async function ProfilePage() {
     redirect('/sign-in');
   }
 
-  // Supabaseからユーザー情報を取得
-  const { data: userData, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('clerk_id', user.id)
-    .single();
+  // Prismaからユーザー情報を取得
+  const userData = await prisma.user_db.findUnique({
+    where: { user_id: user.id },
+  });
 
-  if (error && error.code !== 'PGRST116') {
-    console.error('Error fetching user data:', error);
-  }
-
-  // ユーザーがSupabaseに存在しない場合は作成
   if (!userData) {
     const email = user.emailAddresses[0]?.emailAddress;
     const username = user.username || (email ? email.split('@')[0] : '');
-    const displayName = user.firstName && user.lastName 
-      ? `${user.firstName} ${user.lastName}` 
-      : username;
 
-    const { error } = await supabase.from('users').insert({
-      email: email,
-      user_name: username,
-      display_name: displayName,
-      clerk_id: user.id,
-      profile_image_url: user.imageUrl,
+    // 新規ユーザーを作成
+    await prisma.user_db.create({
+      data: {
+        user_id: user.id,
+        email: email || '',
+        user_name: username,
+        password_hash: 'default_hash',
+        device_type: 'web'
+      }
     });
-
-    if (error) {
-      console.error('Error creating user in Supabase:', error);
-    }
   }
 
   // 最新のデータを取得
-  const { data: latestUserData } = await supabase
-    .from('users')
-    .select('*')
-    .eq('clerk_id', user.id)
-    .single();
+  const latestUserData = await prisma.user_db.findUnique({
+    where: { user_id: user.id },
+  });
 
   return (
     <div className="container py-10">

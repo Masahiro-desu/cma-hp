@@ -293,16 +293,23 @@ export async function POST(req: Request) {
 }
 
 // ペイロードからデバイス情報を抽出するヘルパー関数
-function extractDeviceInfo(payload: any): string | null {
+function extractDeviceInfo(payload: Record<string, unknown>): string | null {
   // ペイロードからデバイス情報を抽出する処理
   console.log("🔍 デバイス情報抽出中...");
   
   // User-Agentや他の情報からデバイスタイプを判断
-  const userAgent = payload.data?.user_agent || 
-                   payload.data?.client?.user_agent || 
-                   payload.data?.request?.user_agent || 
-                   payload.data?.device?.user_agent ||
-                   null;
+  const userAgent = 
+    typeof payload.data === 'object' && payload.data
+      ? (payload.data as { 
+          user_agent?: string;
+          client?: { user_agent?: string };
+          request?: { user_agent?: string };
+          device?: { user_agent?: string };
+        }).user_agent ||
+        (payload.data as { client?: { user_agent?: string } }).client?.user_agent ||
+        (payload.data as { request?: { user_agent?: string } }).request?.user_agent ||
+        (payload.data as { device?: { user_agent?: string } }).device?.user_agent
+      : null;
                    
   if (!userAgent) {
     console.log("⚠️ User-Agent情報が見つかりません");
