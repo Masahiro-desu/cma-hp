@@ -33,9 +33,9 @@ export function Footer() {
             <Link href="/about" className="hover:text-white transition-colors">会社概要</Link>
             <Link href="/services" className="hover:text-white transition-colors">サービス</Link>
             <Link href="/contact" className="hover:text-white transition-colors">お問い合わせ</Link>
-            <Link href="/privacy-policy" className="hover:text-white transition-colors">個人情報取扱</Link>
-            <Link href="/legal" className="hover:text-white transition-colors">特商法の記載</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">利用規約</Link>
+            <Link href="/info/privacy-policy" className="hover:text-white transition-colors">個人情報取扱</Link>
+            <Link href="/info/legal" className="hover:text-white transition-colors">特商法の記載</Link>
+            <Link href="/info/terms" className="hover:text-white transition-colors">利用規約</Link>
           </div>
         </motion.div>
       </div>

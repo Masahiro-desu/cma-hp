@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { ProfileForm } from '@/components/profile/profile-form';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/prismaClient';
 import { currentUser } from '@clerk/nextjs/server';
 
 // 動的レンダリング（ユーザーデータに依存するため）

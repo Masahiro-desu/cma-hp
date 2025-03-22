@@ -3,16 +3,13 @@ import { NextResponse } from 'next/server';
 
 // 実装済みのパスを定義
 const implementedRoutes = [
-  "/", 
-  "/api/webhook(.*)", 
+  "/",
   "/api(.*)", 
-  "/login", 
-  "/signup", 
-  "/about", 
-  "/contact", 
-  "/terms(.*)", 
-  "/privacy-policy(.*)",
-  "/legal(.*)",
+  "/login(.*)", 
+  "/signup(.*)",
+  "/info/terms(.*)", 
+  "/info/privacy-policy(.*)",
+  "/info/legal(.*)",
   "/profile(.*)",
   "/how-others-use(.*)",
   "/use-cases(.*)"

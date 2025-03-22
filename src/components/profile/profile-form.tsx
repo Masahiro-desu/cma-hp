@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { User } from '@clerk/nextjs/server';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/prismaClient';
 
 interface ProfileFormProps {
   user: {
