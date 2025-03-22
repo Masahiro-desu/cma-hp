@@ -19,10 +19,17 @@ export async function GET(
     // paramsからユーザーIDを取得
     const { id } = params;
 
+    // searchParamsから取得フィールドとパスワード含有オプションを取得
+    const fields = searchParams?.fields?.toString().split(',') || [];
+    const includePassword = searchParams?.includePassword === 'true';
+
     // ユーザー情報を取得（管理者向けAPI）
     // 本番環境では適切な権限チェックを追加すること
     const user = await prisma.user_db.findUnique({
       where: { user_id: id },
+      ...(fields.length > 0 && {
+        select: fields.reduce((acc, field) => ({ ...acc, [field]: true }), {})
+      })
     });
 
     if (!user) {
@@ -32,10 +39,12 @@ export async function GET(
       );
     }
 
-    // 機密情報を除外して返却
-    const safeUser = Object.fromEntries(
-      Object.entries(user).filter(([key]) => key !== "password_hash")
-    );
+    // 機密情報の除外（includePasswordがtrueの場合は除外しない）
+    const safeUser = includePassword
+      ? user
+      : Object.fromEntries(
+          Object.entries(user).filter(([key]) => key !== "password_hash")
+        );
 
     return NextResponse.json(safeUser);
   } catch (error) {
