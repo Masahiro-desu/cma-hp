@@ -2,15 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prismaClient";
 import { auth } from "@clerk/nextjs/server";
 
-type RouteParams = {
-  params: {
-    id: string;
-  };
-};
-
 export async function GET(
   request: NextRequest,
-  { params }: RouteParams
+  context: { params: { id: string } }
 ) {
   try {
     // 認証チェック
@@ -23,7 +17,7 @@ export async function GET(
     }
 
     // パラメータからユーザーIDを取得
-    const { id } = params;
+    const { id } = context.params;
 
     // ユーザー情報を取得（管理者向けAPI）
     // 本番環境では適切な権限チェックを追加すること
