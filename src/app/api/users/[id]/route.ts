@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } } & { searchParams: { [key: string]: string | string[] | undefined } }
+  context: any
 ): Promise<Response> {
   try {
     // 認証チェック
@@ -17,7 +17,7 @@ export async function GET(
     }
 
     // パラメータからユーザーIDを取得
-    const { id } = params;
+    const { id } = context.params;
 
     // ユーザー情報を取得（管理者向けAPI）
     // 本番環境では適切な権限チェックを追加すること
