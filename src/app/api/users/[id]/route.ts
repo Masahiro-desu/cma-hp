@@ -4,20 +4,16 @@ import { auth } from "@clerk/nextjs/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params, searchParams }: { params: { id: string }; searchParams: URLSearchParams }
 ): Promise<NextResponse> {
   try {
     // 認証チェック
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json(
-        { error: "認証が必要です" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
     }
 
-    // URLからsearchParamsを取得
-    const searchParams = request.nextUrl.searchParams;
+    // searchParamsから必要なパラメータを取得
     const fields = searchParams.get("fields")?.split(",") || [];
     const includePassword = searchParams.get("includePassword") === "true";
 
@@ -29,15 +25,12 @@ export async function GET(
     const user = await prisma.user_db.findUnique({
       where: { user_id: id },
       ...(fields.length > 0 && {
-        select: fields.reduce((acc, field) => ({ ...acc, [field]: true }), {})
-      })
+        select: fields.reduce((acc, field) => ({ ...acc, [field]: true }), {}),
+      }),
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "ユーザーが見つかりません" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "ユーザーが見つかりません" }, { status: 404 });
     }
 
     // 機密情報の除外（includePasswordがtrueの場合は除外しない）
@@ -50,9 +43,6 @@ export async function GET(
     return NextResponse.json(safeUser);
   } catch (error) {
     console.error("ユーザー情報取得エラー:", error);
-    return NextResponse.json(
-      { error: "サーバーエラーが発生しました" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "サーバーエラーが発生しました" }, { status: 500 });
   }
 }
