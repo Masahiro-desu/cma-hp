@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60 * 60 * 24, // 24時間
   },
   experimental: {
+    appDir: true, // ← これを追加
     optimizeCss: true,
     optimizeServerReact: true,
   },
