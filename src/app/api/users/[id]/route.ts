@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 
 export async function GET(
   _request: NextRequest,
-  props: { params: { id: string } }
+  { params, searchParams }: { params: { id: string }; searchParams?: { [key: string]: string | string[] } }
 ): Promise<NextResponse> {
   try {
     // 認証チェック
@@ -16,8 +16,8 @@ export async function GET(
       );
     }
 
-    // パラメータからユーザーIDを取得
-    const { id } = props.params;
+    // paramsからユーザーIDを取得
+    const { id } = params;
 
     // ユーザー情報を取得（管理者向けAPI）
     // 本番環境では適切な権限チェックを追加すること
@@ -34,9 +34,9 @@ export async function GET(
 
     // 機密情報を除外して返却
     const safeUser = Object.fromEntries(
-      Object.entries(user).filter(([key]) => key !== 'password_hash')
+      Object.entries(user).filter(([key]) => key !== "password_hash")
     );
-    
+
     return NextResponse.json(safeUser);
   } catch (error) {
     console.error("ユーザー情報取得エラー:", error);
@@ -45,4 +45,4 @@ export async function GET(
       { status: 500 }
     );
   }
-} 
+}
