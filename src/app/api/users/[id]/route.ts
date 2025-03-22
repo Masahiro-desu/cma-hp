@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prismaClient";
 import { auth } from "@clerk/nextjs/server";
 
+type RouteParams = {
+  params: {
+    id: string;
+  };
+};
+
 export async function GET(
-  _req: NextRequest,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: RouteParams
 ) {
   try {
     // 認証チェック
