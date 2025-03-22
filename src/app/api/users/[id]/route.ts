@@ -3,8 +3,8 @@ import { prisma } from "@/lib/prismaClient";
 import { auth } from "@clerk/nextjs/server";
 
 export async function GET(
-  _request: NextRequest,
-  { params, searchParams }: { params: { id: string }; searchParams?: { [key: string]: string | string[] } }
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
     // 認証チェック
@@ -16,12 +16,13 @@ export async function GET(
       );
     }
 
+    // URLからsearchParamsを取得
+    const searchParams = request.nextUrl.searchParams;
+    const fields = searchParams.get("fields")?.split(",") || [];
+    const includePassword = searchParams.get("includePassword") === "true";
+
     // paramsからユーザーIDを取得
     const { id } = params;
-
-    // searchParamsから取得フィールドとパスワード含有オプションを取得
-    const fields = searchParams?.fields?.toString().split(',') || [];
-    const includePassword = searchParams?.includePassword === 'true';
 
     // ユーザー情報を取得（管理者向けAPI）
     // 本番環境では適切な権限チェックを追加すること
