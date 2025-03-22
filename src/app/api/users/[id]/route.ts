@@ -3,9 +3,9 @@ import { prisma } from "@/lib/prismaClient";
 import { auth } from "@clerk/nextjs/server";
 
 export async function GET(
-  request: NextRequest,
-  context: any
-): Promise<Response> {
+  _request: NextRequest,
+  props: { params: { id: string } }
+): Promise<NextResponse> {
   try {
     // 認証チェック
     const { userId } = await auth();
@@ -17,7 +17,7 @@ export async function GET(
     }
 
     // パラメータからユーザーIDを取得
-    const { id } = context.params;
+    const { id } = props.params;
 
     // ユーザー情報を取得（管理者向けAPI）
     // 本番環境では適切な権限チェックを追加すること
