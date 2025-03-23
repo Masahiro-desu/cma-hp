@@ -38,26 +38,9 @@ alwaysApply: true
 
 ## プロジェクト構成
 本プロジェクトは、
-Nxモノレポを使用したマイクロサービスアーキテクチャを採用しています。
 フロントエンドにはNext.js App Router、バックエンドにはNestJS、データベースアクセスにはPrismaを使用しています。
 
 ### ルートディレクトリ構造
-
-```
-/
-├── apps/                      # アプリケーションコード
-│   ├── api/                   # NestJSバックエンドアプリケーション
-│   ├── api-e2e/               # バックエンドのE2Eテスト
-│   ├── frontend/              # Next.jsフロントエンドアプリケーション
-│   └── frontend-e2e/          # フロントエンドのE2Eテスト
-├── prisma/                    # Prisma Schema及びマイグレーションファイル
-├── terraform/                 # Terraformによるインフラ定義
-│   ├── environments/          # 環境別設定
-│   └── modules/               # 再利用可能なモジュール
-├── github/                    # GitHub関連ファイル
-├── customRules/               # カスタムルール定義
-└── ... (設定ファイル類)
-```
 
 
 ## プログラミング言語
@@ -157,19 +140,6 @@ Nxモノレポを使用したマイクロサービスアーキテクチャを採
    - 型安全なデータベースアクセス
    - PostgreSQLとの統合
 
-7. **Zod**
-
-   - バージョン: 3.23.8
-   - スキーマ検証
-   - ランタイム型チェック
-   - 型推論との連携
-
-8. **Redux Toolkit**
-   - バージョン: 2.2.7
-   - 状態管理ライブラリ
-   - RTK Query によるデータフェッチング
-   - スライスによる状態管理の簡素化
-
 ### フロントエンド技術
 
 1. **TailwindCSS**
@@ -177,29 +147,6 @@ Nxモノレポを使用したマイクロサービスアーキテクチャを採
    - バージョン: 3.4.4
    - ユーティリティファーストCSSフレームワーク
    - カスタマイズ可能なデザインシステム
-
-2. **Radix UI**
-
-   - アクセシブルなUIコンポーネント
-   - ヘッドレスコンポーネントライブラリ
-   - スタイリングの自由度
-
-3. **React Hook Form**
-
-   - バージョン: 7.53.0
-   - パフォーマンスに優れたフォーム管理
-   - バリデーション連携
-
-4. **TanStack Query**
-
-   - バージョン: 5.56.2
-   - データフェッチングとキャッシュ管理
-   - 非同期状態管理
-
-5. **TanStack Table**
-   - バージョン: 8.19.3
-   - 高度なテーブル管理
-   - ソート、フィルタリング、ページネーション
 
 ### バックエンド技術
 
@@ -209,31 +156,12 @@ Nxモノレポを使用したマイクロサービスアーキテクチャを採
    - 強力なクエリ機能
    - トランザクション処理
 
-2. **BullMQ**
-
-   - バージョン: 5.12.2
-   - Redis ベースのジョブキューシステム
-   - 非同期タスク処理
-   - バックグラウンドジョブ管理
-
-3. **AWS SDK**
-
-   - クラウドサービス統合
-   - S3、Cognito などの AWS サービスとの連携
-
 4. **OpenAPI/Swagger**
    - API ドキュメント生成
    - API スキーマ定義
    - クライアント生成の基盤
 
 ### 開発ツール
-
-1. **Nx**
-
-   - バージョン: 20.1.2
-   - モノレポ管理
-   - ビルドシステム
-   - タスク実行とキャッシング
 
 2. **ESLint**
 
@@ -253,49 +181,16 @@ Nxモノレポを使用したマイクロサービスアーキテクチャを採
    - API クライアント自動生成
    - OpenAPI スキーマからの型生成
 
-5. **Jest**
-
-   - バージョン: 29.7.0
-   - テストフレームワーク
-   - ユニットテストとインテグレーションテスト
-
-6. **Cypress**
-   - バージョン: 13.15.2
-   - E2E テスト
-   - ブラウザ自動化テスト
 
 ## 開発環境のセットアップ
 
 ### 必要なツール
 
-1. **Node.js のインストール**
 
-   - volta または nvm を使用した Node.js 20.18.0 のインストール
-   - yarn 1.22.19 のインストール
-
-2. **環境変数の設定**
+1. **環境変数の設定**
 
    - `.env.example` をコピーして `.env` ファイルを作成
    - 必要な環境変数を設定
-
-3. **プロジェクトのセットアップ**
-
-   ```bash
-   # リポジトリのクローン
-   git clone https://github.com/xxxxx/xxxxx.git
-
-   # 依存関係のインストール
-   yarn install
-
-   # データベースのセットアップ
-   npx prisma migrate dev
-
-   # APIクライアントの生成
-   yarn codegen
-
-   # 開発サーバーの起動
-   yarn dev
-   ```
 
 ### 開発ワークフロー
 
@@ -303,14 +198,12 @@ Nxモノレポを使用したマイクロサービスアーキテクチャを採
 
    ```bash
    # フロントエンドのみ開発
-   yarn dev:ui
    ```
 
 2. **バックエンド開発**
 
    ```bash
    # バックエンドのみ開発
-   yarn dev:api
    ```
 
 3. **データベース操作**
@@ -323,24 +216,24 @@ Nxモノレポを使用したマイクロサービスアーキテクチャを採
    npx prisma generate
 
    # データベースのシード
-   yarn seed
+
    ```
 
 4. **APIクライアント生成**
 
    ```bash
    # OpenAPIスキーマからクライアント生成
-   yarn codegen
+
    ```
 
 5. **リントとフォーマット**
 
    ```bash
    # リント
-   yarn lint
+   npm run lint
 
    # フォーマット
-   yarn prettier
+   npm run prettier
    ```
 
 ## 技術的制約
@@ -370,36 +263,14 @@ Nxモノレポを使用したマイクロサービスアーキテクチャを採
 
    - next: Reactフレームワーク
    - react: UIライブラリ
-   - @tanstack/react-query: データフェッチング
-   - @reduxjs/toolkit: 状態管理
    - tailwindcss: スタイリング
-   - zod: バリデーション
 
 2. **バックエンド**
 
-   - @nestjs/core: サーバーフレームワーク
    - @prisma/client: データベースORM
-   - @nestjs/swagger: APIドキュメント
-   - bullmq: ジョブキュー
-   - class-validator: バリデーション
 
 3. **共通**
    - typescript: 型システム
-   - axios: HTTPクライアント
-   - jest: テスト
-
-### 依存関係管理
-
-1. **Nx モノレポ**
-
-   - apps/frontend: フロントエンドアプリケーション
-   - apps/api: バックエンドアプリケーション
-   - prisma: データベーススキーマ
-
-2. **パッケージ管理**
-   - yarn による依存関係管理
-   - package.json でのバージョン指定
-   - yarn.lock によるロック
 
 
 ### DBに関する重要なルール
@@ -411,166 +282,41 @@ Nxモノレポを使用したマイクロサービスアーキテクチャを採
 - migrationは必ず
 
 ### ER図
+mermaid notationで記述。
 
-```mermaid
-erDiagram
-    User ||--o{ User : "createdBy/updatedBy関連"
-    User }|--o{ Tenant : "belongs to"
-    User }|--o{ UserAccount : "has many"
-    User }|--o{ UserProject : "has many"
-    User ||--o{ Account : "createdBy/updatedBy関連"
-    User ||--o{ Project : "createdBy/updatedBy関連"
-    User ||--o{ Invitation : "createdBy/updatedBy/invitedUser関連"
-    
-    Tenant ||--o{ User : "has many"
-    Tenant ||--o{ Account : "has many"
-    Tenant ||--o{ Project : "has many"
-    Tenant ||--o{ Invitation : "has many"
-    
-    Account ||--o{ Project : "has many"
-    Account ||--o{ UserAccount : "has many"
-    Account ||--o{ Invitation : "has many"
-    
-    Project ||--o{ UserProject : "has many"
-    
-    UserAccount }|--|| User : "belongs to"
-    UserAccount }|--|| Account : "belongs to"
-    
-    UserProject }|--|| User : "belongs to"
-    UserProject }|--|| Project : "belongs to"
-    
-    Invitation }o--|| Account : "may belong to"
-    Invitation }o--|| Project : "may belong to"
-    Invitation }o--|| Tenant : "may belong to"
-    Invitation }|--|| User : "invited user"
-```
 
 以下は各エンティティの主要属性です：
 
-### User
-- id, tenantId, name, email, phoneNumber, tenantRole, createdAt, updatedAt
-- テナントに所属し、アカウントやプロジェクトにアクセス権を持つ
-
-### Tenant
-- id, name, imageUrl, isAgency, createdAt, updatedAt
-- 組織を表し、複数のアカウントとユーザーを保持できる
-
-### Account
-- id, tenantId, name, imageUrl, closingMonth, createdAt, updatedAt
-- テナント内の会計単位、複数のプロジェクトを持つ
-
-### Project
-- id, accountId, tenantId, name, imageUrl, dispOrder, createdAt, updatedAt
-- 広告管理の中心的な単位、広告やメトリクスなど多くのリソースを持つ
-
-### UserAccount
-- userId, accountId, role
-- ユーザーとアカウントの関連付け、権限管理
-
-### UserProject
-- userId, projectId, role
-- ユーザーとプロジェクトの関連付け、権限管理
-
-### Invitation
-- id, tenantId, accountId, projectId, email, inviteTo, role, status, expiresAt, token, invitedUserId
-- ユーザー招待の管理
 
 
 
 ## デプロイ概要
 
-本プロジェクトは、AWS上にDockerコンテナとして展開されるマイクロサービスアーキテクチャを採用しています。フロントエンドとバックエンドは別々のコンテナとしてビルド・デプロイされ、AWS CodePipelineを使用したCI/CDパイプラインによって自動化されています。
+本プロジェクトは、Vercelでのデプロイを採用しています。ISRを実装しています。
 
 ### デプロイフロー
 
 このプロジェクトのデプロイフローは以下のように構成されています：
 
-```mermaid
-flowchart TB
-    GitPush[Gitリポジトリへのプッシュ] --> CodePipeline[AWS CodePipeline]
-    CodePipeline --> ParallelBuilds[並行ビルドプロセス]
-    
-    subgraph ParallelBuilds[並行ビルドプロセス]
-        BackendBuild[バックエンドビルド] 
-        FrontendBuild[フロントエンドビルド]
-    end
-    
-    BackendBuild --> BackendECR[バックエンドイメージをECRにプッシュ]
-    FrontendBuild --> FrontendECR[フロントエンドイメージをECRにプッシュ]
-    
-    BackendECR --> DBMigration[DBマイグレーション実行]
-    DBMigration --> SeedData[シードデータ投入]
-    
-    BackendECR --> BackendDeploy[バックエンドをECSにデプロイ]
-    FrontendECR --> FrontendDeploy[フロントエンドをECSにデプロイ]
-```
 
 ### 重要なファイル
 
 デプロイプロセスを理解・修正する際には、以下のファイルを特に注視する必要があります：
 
-#### Dockerfiles
-
-1. **Dockerfile.frontend**
-   - フロントエンド（Next.js）のビルドとデプロイに使用
-   - マルチステージビルド：ビルド環境と本番環境を分離
-   - 環境変数（ENVIRONMENT, NEXT_PUBLIC_CLOUDFRONT_DOMAIN, NEXT_PUBLIC_ADOBE_CLIENT_ID）の設定
-   - ポート3000でNext.jsアプリケーションを起動
-
-2. **Dockerfile.backend**
-   - バックエンド（NestJS）のビルドとデプロイに使用
-   - マルチステージビルド構成
-   - 環境変数（ENVIRONMENT）の設定
-   - メモリ制限設定（--max-old-space-size=6144）付きでNode.jsアプリケーションを起動
-
-#### BuildSpec設定
-
-1. **buildspec_frontend.yml**
-   - フロントエンドのCI/CDパイプライン設定
-   - インストール、ビルド、デプロイフェーズを定義
-   - AWS ECRへのログインとイメージのプッシュ
-   - 環境変数を使用したDockerビルド引数の設定
-   - ECSデプロイ用のimagedefinitions.jsonの生成
-
-2. **buildspec_backend.yml**
-   - バックエンドのCI/CDパイプライン設定
-   - インストール、ビルド、デプロイフェーズを定義
-   - データベースマイグレーションとシードデータ投入を実行
-   - AWS ECRへのログインとイメージのプッシュ
-   - ECSデプロイ用のimagedefinitions.jsonの生成
-
 ### 環境変数
 
 デプロイプロセスでは、以下の重要な環境変数が使用されています：
 
-#### 共通
-- `ENVIRONMENT`: 環境識別子（dev, stg, prod等）
-- `IMAGE_TAG`: コンテナイメージのタグ
-- `IMAGE_REPO_URL`: ECRレポジトリURL
-- `AWS_REGION`: AWSリージョン
-- `AWS_ACCOUNT_ID`: AWSアカウントID
-
-#### フロントエンド特有
-- `NEXT_PUBLIC_CLOUDFRONT_DOMAIN`: CloudFrontのドメイン
-- `NEXT_PUBLIC_ADOBE_CLIENT_ID`: Adobe APIのクライアントID
 
 ### デプロイ後の処理
 
 バックエンドのデプロイプロセスでは、イメージのビルドとプッシュ後に以下の追加タスクが実行されます：
 
-1. **データベースマイグレーション** (`yarn prisma migrate deploy`)
+1. **データベースマイグレーション** (`npm run prisma migrate deploy`)
    - Prismaを使用したスキーマ変更の適用
 
-2. **シードデータ投入** (`yarn seed:prod`)
+2. **シードデータ投入** (`npm run seed:prod`)
    - 本番環境用の初期データ設定
-
-### インフラストラクチャ
-
-デプロイ先のインフラストラクチャはTerraformで管理されています。関連するTerraform設定は以下のディレクトリにあります：
-
-- `terraform/modules/ap-northeast-1/codeBuild/`: CodeBuildの設定
-- `terraform/modules/ap-northeast-1/ecs/`: ECSの設定
-- `terraform/modules/ap-northeast-1/ecr/`: ECRの設定
 
 ### デプロイに関する注意点
 
@@ -1247,32 +993,6 @@ it('should activate inactive user', async () => {
 
 ### Jestでのカバレッジ測定
 
-```bash
-# カバレッジ測定付きでテスト実行
-yarn test --coverage
-```
-
-```json
-// jest.config.js
-module.exports = {
-  // ...
-  coverageThreshold: {
-    global: {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80
-    }
-  },
-  collectCoverageFrom: [
-    "src/**/*.{js,jsx,ts,tsx}",
-    "!src/**/*.d.ts",
-    "!src/index.{js,ts}",
-    "!src/**/*.stories.{js,jsx,ts,tsx}"
-  ]
-};
-```
-
 ## TDDの導入と習慣化
 
 ### TDDへの段階的移行
@@ -1290,62 +1010,7 @@ module.exports = {
 
 ### GitによるTDDの強化
 
-TDDのサイクルに合わせたコミット戦略：
-
-```bash
-# Red: 失敗するテストを書く
-git add src/user/user.service.spec.ts
-git commit -m "test: Add test for user activation"
-
-# Green: 実装を行い、テストをパスさせる
-git add src/user/user.service.ts
-git commit -m "feat: Implement user activation"
-
-# Refactor: コードを改善する
-git add src/user/user.service.ts
-git commit -m "refactor: Improve user activation logic"
-```
-
 ## NestJSとNext.jsのテスト設定
-
-### NestJSのテスト設定
-
-```typescript
-// apps/api/jest.config.ts
-module.exports = {
-  displayName: 'api',
-  preset: '../../jest.preset.js',
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-    },
-  },
-  testEnvironment: 'node',
-  transform: {
-    '^.+\\.[tj]s$': 'ts-jest',
-  },
-  moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/api',
-};
-```
-
-### Next.jsのテスト設定
-
-```typescript
-// apps/frontend/jest.config.ts
-module.exports = {
-  displayName: 'frontend',
-  preset: '../../jest.preset.js',
-  transform: {
-    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
-    '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nrwl/next/babel'] }],
-  },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/apps/frontend',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testEnvironment: 'jsdom',
-};
-```
 
 ## まとめ
 
