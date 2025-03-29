@@ -21,7 +21,7 @@ const publicRoutes = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
-  const { userId } = auth();
+  const { userId } = auth;
   const url = req.nextUrl;
 
   console.log(`[Middleware] Path: ${url.pathname}, UserID: ${userId}`);
@@ -39,7 +39,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     console.log(`[Middleware] User not authenticated for protected route (${url.pathname}). Redirecting via clerkMiddleware.`);
     // No explicit redirect needed here, clerkMiddleware handles it.
     // You might want to ensure your Clerk Frontend API keys and sign-in URL are set correctly in env.
-    return auth().redirectToSignIn(); // Explicit redirect for clarity, though Clerk might handle it
+    return auth.redirectToSignIn();
   }
 
   // --- 3. Handle Authenticated Users --- 
