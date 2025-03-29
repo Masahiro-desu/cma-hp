@@ -1,4 +1,4 @@
-import { clerkMiddleware, createRouteMatcher, type ClerkMiddlewareAuth, getAuth } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher, auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createClerkClient } from '@clerk/nextjs/server';
@@ -20,11 +20,13 @@ const publicRoutes = createRouteMatcher([
   // Add any other public API routes or pages here
 ]);
 
-export default clerkMiddleware(async (auth: ClerkMiddlewareAuth, req: NextRequest) => {
-  const { userId } = getAuth(req);
+export default clerkMiddleware(async (req: NextRequest) => {
+  // auth() ヘルパー関数を使用して userId を取得
+  const { userId } = auth();
   const url = req.nextUrl;
 
-  console.log(`[Middleware] Path: ${url.pathname}, UserID: ${userId}`);
+  // userId をログに出力（null の可能性あり）
+  console.log(`[Middleware] Path: ${url.pathname}, UserID from auth(): ${userId}`);
 
   // --- 1. Handle Public Routes --- 
   if (publicRoutes(req)) {
@@ -37,39 +39,49 @@ export default clerkMiddleware(async (auth: ClerkMiddlewareAuth, req: NextReques
     // clerkMiddleware automatically redirects to login for non-public routes
     // if the user is not authenticated. Logging here for clarity.
     console.log(`[Middleware] User not authenticated for protected route (${url.pathname}). Relying on clerkMiddleware to redirect.`);
-    // No explicit return needed here. clerkMiddleware handles the redirect.
-    // If Clerk doesn't redirect, ensure sign-in URL is correct in env & Clerk dashboard.
+    // Edge Runtime のために明示的な NextResponse を返す (Clerk が上書きするはず)
+    return NextResponse.next(); 
   }
 
   // --- 3. Handle Authenticated Users --- 
-  console.log(`[Middleware] User ${userId} authenticated. Checking specific route rules.`);
+  // userId が null でないことを確認してからログ出力
+  if (userId) {
+    console.log(`[Middleware] User ${userId} authenticated via auth(). Checking specific route rules.`);
+  } else {
+    // このパスは理論上、ステップ2で処理されるはずだが、念のためログ
+    console.log(`[Middleware] userId is null after public route check.`);
+  }
 
   // --- 3a. Special Check for /ai-catch-up --- 
   if (needsEmailCheckRoute(req)) {
-    // Add type guard here
-    if (!userId) {
-      // This should theoretically not happen due to the check in section 2,
-      // but adding it satisfies TypeScript and handles edge cases.
-      console.error('[Middleware] Error: userId is null when starting email check. Redirecting to login.');
-      // Redirect to login or handle appropriately
+    // Add type guard here (userId が string であることを確認)
+    if (typeof userId !== 'string') {
+      console.error('[Middleware] Error: userId is not a string when starting email check. Redirecting to login.');
       return NextResponse.redirect(new URL('/login', req.url)); 
     }
-    // At this point, userId is guaranteed to be a string.
+    
     console.log(`[Middleware] Route ${url.pathname} requires email check for user ${userId}.`);
+    // 環境変数チェックログを追加
+    console.log(`[Middleware] CLERK_SECRET_KEY presence check: ${!!process.env.CLERK_SECRET_KEY}`);
     let isAllowedEmail = false;
     try {
+      if (!process.env.CLERK_SECRET_KEY) {
+        throw new Error("CLERK_SECRET_KEY environment variable is not set.");
+      }
       const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
-      const user = await clerk.users.getUser(userId); // Now userId is guaranteed non-null
+      console.log(`[Middleware] Attempting to get user data for ${userId}...`);
+      const user = await clerk.users.getUser(userId);
+      console.log(`[Middleware] Successfully got user data for ${userId}.`);
       if (user && user.emailAddresses && Array.isArray(user.emailAddresses)) {
         isAllowedEmail = user.emailAddresses.some(
           (email) => email.emailAddress === 'masahiro.otk.55@gmail.com'
         );
         console.log(`[Middleware] Email check for ${userId} on ${url.pathname}. Allowed: ${isAllowedEmail}`);
       } else {
-        console.warn(`[Middleware] User ${userId} missing email addresses.`);
+        console.warn(`[Middleware] User ${userId} missing email addresses or unexpected user object structure.`);
       }
     } catch (error: unknown) {
-      console.error(`[Middleware] Error during email check for ${userId}:`, error instanceof Error ? error.message : error);
+      console.error(`[Middleware] Error during email check/getUser for ${userId}:`, error instanceof Error ? error.message : String(error));
       // Redirect to home on error during email check
       if (url.pathname !== '/') {
         return NextResponse.redirect(new URL('/', req.url));
