@@ -1,132 +1,104 @@
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getAuth } from '@clerk/nextjs/server';
 import { createClerkClient } from '@clerk/nextjs/server';
 
-// 実装済みのパスを定義
-// const implementedRoutes = [
-//   "/",
-//   "/api(.*)", 
-//   "/login(.*)", 
-//   "/signup(.*)",
-//   "/info/terms(.*)", 
-//   "/info/privacy-policy(.*)",
-//   "/info/legal(.*)",
-//   "/profile(.*)",
-//   "/how-others-use(.*)",
-//   "/use-cases(.*)",
-//   "/ai-catch-up(.*)"
-// ];
+// Define routes that require authentication but have specific authorization rules
+const needsEmailCheckRoute = createRouteMatcher([
+  '/ai-catch-up(.*)', // Only specific emails can access this
+]);
 
-// パブリックルートのマッチャーを作成
-// const publicRoutes = createRouteMatcher([
-//   "/", 
-//   "/api/webhook(.*)", 
-//   "/api/auth/callback(.*)",  // 認証コールバックは公開
-//   "/login", 
-//   "/signup", 
-//   "/about", 
-//   "/contact", 
-//   "/terms(.*)", 
-//   "/privacy-policy(.*)",
-//   "/legal(.*)",
-//   "/how-others-use(.*)",
-//   "/use-cases(.*)"
-// ]);
+// Define public routes accessible to everyone
+const publicRoutes = createRouteMatcher([
+  '/', // Homepage is public
+  '/login(.*)', // Login/Signup pages
+  '/signup(.*)',
+  '/info/(.*)', // Info pages (terms, privacy, legal)
+  '/how-others-use(.*)', // Assuming these are public
+  '/use-cases(.*)', // Assuming these are public
+  '/api/webhook(.*)', // Webhooks are typically public
+  // Add any other public API routes or pages here
+]);
 
-// 実装済みルートのマッチャーを作成
-// const implementedRoutesPattern = createRouteMatcher(implementedRoutes); // 未使用のためコメントアウト
+export default clerkMiddleware(async (auth, req: NextRequest) => {
+  const { userId } = auth();
+  const url = req.nextUrl;
 
-export async function middleware(request: NextRequest) {
-  console.log('[Middleware] Start processing request for:', request.nextUrl.pathname);
+  console.log(`[Middleware] Path: ${url.pathname}, UserID: ${userId}`);
 
-  // 開発環境の場合はスキップ
-  if (process.env.NODE_ENV === 'development') {
-    console.log('[Middleware] Development environment detected, skipping auth checks.');
-    return NextResponse.next();
+  // --- 1. Handle Public Routes --- 
+  if (publicRoutes(req)) {
+    console.log(`[Middleware] Public route (${url.pathname}), allowing access.`);
+    return NextResponse.next(); // Allow access to public routes
   }
 
-  try {
-    // ユーザー認証チェック
-    console.log('[Middleware] Checking authentication status...');
-    const { userId } = await getAuth(request);
-    console.log('[Middleware] getAuth result - userId:', userId);
+  // --- 2. Handle Unauthenticated Users for Protected Routes --- 
+  if (!userId) {
+    // clerkMiddleware automatically redirects to login for non-public routes
+    // if the user is not authenticated. Logging here for clarity.
+    console.log(`[Middleware] User not authenticated for protected route (${url.pathname}). Redirecting via clerkMiddleware.`);
+    // No explicit redirect needed here, clerkMiddleware handles it.
+    // You might want to ensure your Clerk Frontend API keys and sign-in URL are set correctly in env.
+    return auth().redirectToSignIn(); // Explicit redirect for clarity, though Clerk might handle it
+  }
 
-    if (!userId) {
-      console.log('[Middleware] User not authenticated, redirecting to login.');
-      const signInUrl = new URL('/login', request.url); // Adjust '/login' if your sign-in page is different
-      signInUrl.searchParams.set('redirect_url', request.url);
-      return NextResponse.redirect(signInUrl);
-    }
+  // --- 3. Handle Authenticated Users --- 
+  console.log(`[Middleware] User ${userId} authenticated. Checking specific route rules.`);
 
-    console.log(`[Middleware] User authenticated: ${userId}. Proceeding with email check.`);
-
-    // メールアドレスチェック
+  // --- 3a. Special Check for /ai-catch-up --- 
+  if (needsEmailCheckRoute(req)) {
+    console.log(`[Middleware] Route ${url.pathname} requires email check for user ${userId}.`);
     let isAllowedEmail = false;
     try {
-      console.log(`[Middleware] Creating Clerk client for email check...`);
       const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
-      console.log(`[Middleware] Fetching user data for userId: ${userId}...`);
       const user = await clerk.users.getUser(userId);
-      console.log(`[Middleware] Successfully fetched user data for userId: ${userId}. User object keys:`, user ? Object.keys(user) : 'null');
-
       if (user && user.emailAddresses && Array.isArray(user.emailAddresses)) {
-          isAllowedEmail = user.emailAddresses.some(
-            (email: { emailAddress: string }) => email.emailAddress === 'masahiro.otk.55@gmail.com'
-          );
-          console.log(`[Middleware] Email check for userId ${userId}. Allowed: ${isAllowedEmail}`);
+        isAllowedEmail = user.emailAddresses.some(
+          (email) => email.emailAddress === 'masahiro.otk.55@gmail.com'
+        );
+        console.log(`[Middleware] Email check for ${userId} on ${url.pathname}. Allowed: ${isAllowedEmail}`);
       } else {
-        console.warn(`[Middleware] User object for userId ${userId} is missing expected emailAddresses array.`);
+        console.warn(`[Middleware] User ${userId} missing email addresses.`);
       }
-
-    } catch (emailCheckError: unknown) {
-      console.error(`[Middleware] Error during Clerk user fetch or email check for userId: ${userId}`, 
-        emailCheckError instanceof Error ? emailCheckError.message : emailCheckError
-      );
-      // ここでエラーをどう扱うか？一旦エラーページかトップにリダイレクトするのが安全
-      console.log('[Middleware] Redirecting to home due to email check error.');
-      return NextResponse.redirect(new URL('/', request.url));
+    } catch (error: unknown) {
+      console.error(`[Middleware] Error during email check for ${userId}:`, error instanceof Error ? error.message : error);
+      // Redirect to home on error during email check
+      if (url.pathname !== '/') {
+        return NextResponse.redirect(new URL('/', req.url));
+      }
+      // If already at home, allow to prevent loop
+      return NextResponse.next(); 
     }
 
     if (!isAllowedEmail) {
-      // 現在のパスが既に '/' でない場合のみリダイレクトする
-      if (request.nextUrl.pathname !== '/') {
-        console.log(`[Middleware] Email not allowed for userId ${userId}. Redirecting to /`);
-        return NextResponse.redirect(new URL('/', request.url));
-      } else {
-        console.log(`[Middleware] Email not allowed for userId ${userId}, but already at /. Allowing access to prevent loop.`);
-        // 既にホームページにいる場合はループを防ぐためにそのまま進める
+      console.log(`[Middleware] Email not allowed for ${userId} on ${url.pathname}. Redirecting to /.`);
+      // Redirect to home if email is not allowed, avoiding loop if already at home
+      if (url.pathname !== '/') {
+        return NextResponse.redirect(new URL('/', req.url));
       }
+       // If already at home, allow to prevent loop
+       return NextResponse.next(); 
     }
-
-    // パブリックルートのチェックは、認証が必要ないルートに対して行うべきだが、
-    // ここまで来たら認証済みなので、基本的には次の処理に進む
-    // if (publicRoutes(request)) {
-    //   console.log('[Middleware] Path is public, allowing access.');
-    //   return NextResponse.next();
-    // }
-
-    console.log(`[Middleware] Email check passed for userId: ${userId}. Allowing access to:`, request.nextUrl.pathname);
-    return NextResponse.next();
-
-  } catch (error: unknown) {
-    console.error('[Middleware] Unhandled error during middleware execution:', 
-      error instanceof Error ? error.message : error
-    );
-    // 未処理のエラーが発生した場合、500エラーを防ぐためにリダイレクトするなどの処理
-    console.log('[Middleware] Redirecting to home due to unhandled middleware error.');
-    // ここで500エラーを返す代わりに、エラーページやホームページにリダイレクトすることも検討
-    // return NextResponse.redirect(new URL('/error', request.url)); // エラーページがある場合
-    return NextResponse.redirect(new URL('/', request.url));
+    // If email is allowed, fall through to allow access
+    console.log(`[Middleware] Email allowed for ${userId} on ${url.pathname}. Allowing access.`);
   }
-}
+
+  // --- 3b. Default Allow for Authenticated Users on other protected routes --- 
+  console.log(`[Middleware] Allowing authenticated user ${userId} access to ${url.pathname}.`);
+  return NextResponse.next(); // Allow access to all other authenticated routes
+});
 
 export const config = {
   matcher: [
-    // Next.jsの内部ファイルと静的ファイルをスキップ
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // APIルートは常に実行
-    '/(api|trpc)(.*)',
-    '/ai-catch-up/:path*',
+    // Skip Next.js internals and static files
+    '/((?!.+\\.[\\w]+$|_next).*)', 
+    // Run on specific routes 
+    '/', // Match homepage
+    '/(api|trpc)(.*)', // Match API routes
+    '/ai-catch-up(.*)', // Match the specific protected route
+    '/info/(.*)', // Match info pages (to potentially handle future auth needs)
+    '/login(.*)', // Match login/signup pages
+    '/signup(.*)',
+    // Add other routes you want the middleware to run on
   ],
 }; 
