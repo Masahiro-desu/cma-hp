@@ -21,8 +21,8 @@ const publicRoutes = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (_auth: ClerkMiddlewareAuth, req: NextRequest) => {
-  // auth() ヘルパー関数を使用して userId を取得
-  const { userId } = auth();
+  // auth() ヘルパー関数が Promise を返すと型推論されているため await する
+  const { userId } = await auth();
   const url = req.nextUrl;
 
   // userId をログに出力（null の可能性あり）
