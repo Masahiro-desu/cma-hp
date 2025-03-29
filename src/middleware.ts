@@ -1,4 +1,4 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher, type ClerkMiddlewareAuth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createClerkClient } from '@clerk/nextjs/server';
@@ -20,7 +20,7 @@ const publicRoutes = createRouteMatcher([
   // Add any other public API routes or pages here
 ]);
 
-export default clerkMiddleware(async (auth, req: NextRequest) => {
+export default clerkMiddleware(async (auth: ClerkMiddlewareAuth, req: NextRequest) => {
   const { userId } = auth;
   const url = req.nextUrl;
 
