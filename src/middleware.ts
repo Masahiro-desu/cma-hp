@@ -1,4 +1,4 @@
-import { clerkMiddleware, createRouteMatcher, auth, type ClerkMiddlewareAuth } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher, getAuth, type ClerkMiddlewareAuth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createClerkClient } from '@clerk/nextjs/server';
@@ -21,12 +21,10 @@ const publicRoutes = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (_auth: ClerkMiddlewareAuth, req: NextRequest) => {
-  // auth() ヘルパー関数が Promise を返すと型推論されているため await する
-  const { userId } = await auth();
+  const { userId } = getAuth(req);
   const url = req.nextUrl;
 
-  // userId をログに出力（null の可能性あり）
-  console.log(`[Middleware] Path: ${url.pathname}, UserID from auth(): ${userId}`);
+  console.log(`[Middleware] Path: ${url.pathname}, UserID from getAuth(): ${userId}`);
 
   // --- 1. Handle Public Routes --- 
   if (publicRoutes(req)) {
@@ -46,7 +44,7 @@ export default clerkMiddleware(async (_auth: ClerkMiddlewareAuth, req: NextReque
   // --- 3. Handle Authenticated Users --- 
   // userId が null でないことを確認してからログ出力
   if (userId) {
-    console.log(`[Middleware] User ${userId} authenticated via auth(). Checking specific route rules.`);
+    console.log(`[Middleware] User ${userId} authenticated via getAuth(). Checking specific route rules.`);
   } else {
     // このパスは理論上、ステップ2で処理されるはずだが、念のためログ
     console.log(`[Middleware] userId is null after public route check.`);
@@ -61,7 +59,6 @@ export default clerkMiddleware(async (_auth: ClerkMiddlewareAuth, req: NextReque
     }
     
     console.log(`[Middleware] Route ${url.pathname} requires email check for user ${userId}.`);
-    // 環境変数チェックログを追加
     console.log(`[Middleware] CLERK_SECRET_KEY presence check: ${!!process.env.CLERK_SECRET_KEY}`);
     let isAllowedEmail = false;
     try {
@@ -70,7 +67,7 @@ export default clerkMiddleware(async (_auth: ClerkMiddlewareAuth, req: NextReque
       }
       const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
       console.log(`[Middleware] Attempting to get user data for ${userId}...`);
-      const user = await clerk.users.getUser(userId);
+      const user = await clerk.users.getUser(userId!);
       console.log(`[Middleware] Successfully got user data for ${userId}.`);
       if (user && user.emailAddresses && Array.isArray(user.emailAddresses)) {
         isAllowedEmail = user.emailAddresses.some(
