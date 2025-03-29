@@ -1,4 +1,4 @@
-import { clerkMiddleware, createRouteMatcher, type ClerkMiddlewareAuth } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher, type ClerkMiddlewareAuth, getAuth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createClerkClient } from '@clerk/nextjs/server';
@@ -21,7 +21,7 @@ const publicRoutes = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth: ClerkMiddlewareAuth, req: NextRequest) => {
-  const { userId } = auth;
+  const { userId } = getAuth(req);
   const url = req.nextUrl;
 
   console.log(`[Middleware] Path: ${url.pathname}, UserID: ${userId}`);
