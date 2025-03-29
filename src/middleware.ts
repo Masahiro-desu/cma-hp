@@ -1,4 +1,4 @@
-import { clerkMiddleware, createRouteMatcher, auth } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher, auth, type ClerkMiddlewareAuth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createClerkClient } from '@clerk/nextjs/server';
@@ -20,7 +20,7 @@ const publicRoutes = createRouteMatcher([
   // Add any other public API routes or pages here
 ]);
 
-export default clerkMiddleware(async (req: NextRequest) => {
+export default clerkMiddleware(async (_auth: ClerkMiddlewareAuth, req: NextRequest) => {
   // auth() ヘルパー関数を使用して userId を取得
   const { userId } = auth();
   const url = req.nextUrl;
