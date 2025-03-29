@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "個人情報取扱 | CMA",
@@ -72,6 +74,15 @@ export default function PrivacyPolicy() {
             制定日: 2024年3月1日<br />
             最終更新日: 2024年3月21日
           </div>
+        </div>
+        <div className="mt-8">
+          <Link
+            href="/"
+            className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            <span className="text-sm">トップに戻る</span>
+          </Link>
         </div>
       </div>
     </main>

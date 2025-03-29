@@ -30,6 +30,9 @@ export function Header() {
           <Link href="/" className="text-sm text-[#798BA6] hover:text-[#1a293f]">
             ホーム
           </Link>
+          <Link href="/ai-catch-up" className="text-sm text-[#798BA6] hover:text-[#1a293f]">
+            AI情報収集
+          </Link>
           <Link href="/about" className="text-sm text-[#798BA6] hover:text-[#1a293f]">
             会社概要
           </Link>
