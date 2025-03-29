@@ -1,56 +1,51 @@
 import { clerkMiddleware, createRouteMatcher, getAuth, type ClerkMiddlewareAuth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { createClerkClient } from '@clerk/nextjs/server';
-
-// Define routes that require authentication but have specific authorization rules
-const needsEmailCheckRoute = createRouteMatcher([
-  '/ai-catch-up(.*)', // Only specific emails can access this
-]);
+// createClerkClient のインポートはメールチェック削除により不要になる可能性
+// import { createClerkClient } from '@clerk/nextjs/server'; 
 
 // Define public routes accessible to everyone
 const publicRoutes = createRouteMatcher([
-  '/', // Homepage is public
-  '/login(.*)', // Login/Signup pages
-  '/signup(.*)',
-  '/info/(.*)', // Info pages (terms, privacy, legal)
-  '/how-others-use(.*)', // Assuming these are public
-  '/use-cases(.*)', // Assuming these are public
-  '/api/webhook(.*)', // Webhooks are typically public
-  // Add any other public API routes or pages here
+  '/', // HomePage
+  '/login(.*)', // ログイン関連
+  '/signup(.*)', // サインアップ関連
+  '/info/legal', // 法的情報
+  '/info/privacy-policy', // プライバシーポリシー
+  '/info/terms', // 利用規約
+  '/api/webhooks/user' // Clerk Webhook (必要に応じて)
 ]);
 
-export default clerkMiddleware(async (_auth: ClerkMiddlewareAuth, req: NextRequest) => {
+// メールチェックが必要なルート（今回はコメントアウトするため使用しない）
+/*
+const needsEmailCheckRoute = createRouteMatcher([
+  '/ai-catch-up(.*)'
+]);
+*/
+
+export default clerkMiddleware(async (_auth: ClerkMiddlewareAuth, req: NextRequest) => { 
   const { userId } = getAuth(req);
   const url = req.nextUrl;
 
-  console.log(`[Middleware] Path: ${url.pathname}, UserID from getAuth(): ${userId}`);
+  console.log(`[Middleware] Simplified - Path: ${url.pathname}, UserID: ${userId}`);
 
-  // --- 1. Handle Public Routes --- 
+  // --- 1. Handle Public Routes ---
   if (publicRoutes(req)) {
-    console.log(`[Middleware] Public route (${url.pathname}), allowing access.`);
-    return NextResponse.next(); // Allow access to public routes
+    console.log(`[Middleware] Simplified - Public route (${url.pathname}), allowing access.`);
+    return NextResponse.next();
   }
 
-  // --- 2. Handle Unauthenticated Users for Protected Routes --- 
+  // --- 2. Handle Unauthenticated Users for Protected Routes ---
   if (!userId) {
-    // clerkMiddleware automatically redirects to login for non-public routes
-    // if the user is not authenticated. Logging here for clarity.
-    console.log(`[Middleware] User not authenticated for protected route (${url.pathname}). Relying on clerkMiddleware to redirect.`);
-    // Edge Runtime のために明示的な NextResponse を返す (Clerk が上書きするはず)
-    return NextResponse.next(); 
+    console.log(`[Middleware] Simplified - User not authenticated for protected route (${url.pathname}). Relying on clerkMiddleware to redirect.`);
+    // Clerkがリダイレクトを処理するはずなので、NextResponse.next() を返す
+    return NextResponse.next();
   }
 
   // --- 3. Handle Authenticated Users --- 
-  // userId が null でないことを確認してからログ出力
-  if (userId) {
-    console.log(`[Middleware] User ${userId} authenticated via getAuth(). Checking specific route rules.`);
-  } else {
-    // このパスは理論上、ステップ2で処理されるはずだが、念のためログ
-    console.log(`[Middleware] userId is null after public route check.`);
-  }
+  console.log(`[Middleware] Simplified - User ${userId} authenticated. Allowing access to ${url.pathname}.`);
 
-  // --- 3a. Special Check for /ai-catch-up --- 
+  // --- メールアドレスチェックロジックをコメントアウト ---
+  /*
   if (needsEmailCheckRoute(req)) {
     // Add type guard here (userId が string であることを確認)
     if (typeof userId !== 'string') {
@@ -65,9 +60,11 @@ export default clerkMiddleware(async (_auth: ClerkMiddlewareAuth, req: NextReque
       if (!process.env.CLERK_SECRET_KEY) {
         throw new Error("CLERK_SECRET_KEY environment variable is not set.");
       }
+      // createClerkClient のインポートが必要
       const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
       console.log(`[Middleware] Attempting to get user data for ${userId}...`);
-      const user = await clerk.users.getUser(userId!);
+      // getUser の引数で非 null アサーション (!) を使用してビルドエラーを回避
+      const user = await clerk.users.getUser(userId!); 
       console.log(`[Middleware] Successfully got user data for ${userId}.`);
       if (user && user.emailAddresses && Array.isArray(user.emailAddresses)) {
         isAllowedEmail = user.emailAddresses.some(
@@ -88,34 +85,25 @@ export default clerkMiddleware(async (_auth: ClerkMiddlewareAuth, req: NextReque
     }
 
     if (!isAllowedEmail) {
-      console.log(`[Middleware] Email not allowed for ${userId} on ${url.pathname}. Redirecting to /.`);
-      // Redirect to home if email is not allowed, avoiding loop if already at home
-      if (url.pathname !== '/') {
-        return NextResponse.redirect(new URL('/', req.url));
-      }
-       // If already at home, allow to prevent loop
-       return NextResponse.next(); 
+      console.log(`[Middleware] User ${userId} does not have allowed email for ${url.pathname}. Redirecting to home.`);
+      // Redirect to a 'not authorized' page or home page
+      return NextResponse.redirect(new URL('/', req.url)); // Redirect to home
     }
-    // If email is allowed, fall through to allow access
-    console.log(`[Middleware] Email allowed for ${userId} on ${url.pathname}. Allowing access.`);
-  }
 
-  // --- 3b. Default Allow for Authenticated Users on other protected routes --- 
-  console.log(`[Middleware] Allowing authenticated user ${userId} access to ${url.pathname}.`);
-  return NextResponse.next(); // Allow access to all other authenticated routes
+    console.log(`[Middleware] User ${userId} has allowed email for ${url.pathname}. Allowing access.`);
+  }
+  */
+  // --- ここまでコメントアウト ---
+
+  // 認証済みで、特別なチェックがない場合はアクセスを許可
+  return NextResponse.next();
 });
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and static files
-    '/((?!.+\\.[\\w]+$|_next).*)', 
-    // Run on specific routes 
-    '/', // Match homepage
-    '/(api|trpc)(.*)', // Match API routes
-    '/ai-catch-up(.*)', // Match the specific protected route
-    '/info/(.*)', // Match info pages (to potentially handle future auth needs)
-    '/login(.*)', // Match login/signup pages
-    '/signup(.*)',
-    // Add other routes you want the middleware to run on
+    // Skip Next.js internals and all static files including image optimization files
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).)*',
+    // Match specific routes if needed, e.g. API routes
+    // '/api/:path*',
   ],
 }; 
