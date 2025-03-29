@@ -46,11 +46,20 @@ export default clerkMiddleware(async (auth: ClerkMiddlewareAuth, req: NextReques
 
   // --- 3a. Special Check for /ai-catch-up --- 
   if (needsEmailCheckRoute(req)) {
+    // Add type guard here
+    if (!userId) {
+      // This should theoretically not happen due to the check in section 2,
+      // but adding it satisfies TypeScript and handles edge cases.
+      console.error('[Middleware] Error: userId is null when starting email check. Redirecting to login.');
+      // Redirect to login or handle appropriately
+      return NextResponse.redirect(new URL('/login', req.url)); 
+    }
+    // At this point, userId is guaranteed to be a string.
     console.log(`[Middleware] Route ${url.pathname} requires email check for user ${userId}.`);
     let isAllowedEmail = false;
     try {
       const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
-      const user = await clerk.users.getUser(userId);
+      const user = await clerk.users.getUser(userId); // Now userId is guaranteed non-null
       if (user && user.emailAddresses && Array.isArray(user.emailAddresses)) {
         isAllowedEmail = user.emailAddresses.some(
           (email) => email.emailAddress === 'masahiro.otk.55@gmail.com'
