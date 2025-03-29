@@ -89,8 +89,14 @@ export async function middleware(request: NextRequest) {
     }
 
     if (!isAllowedEmail) {
-      console.log(`[Middleware] Email not allowed for userId ${userId}. Redirecting to /`);
-      return NextResponse.redirect(new URL('/', request.url));
+      // 現在のパスが既に '/' でない場合のみリダイレクトする
+      if (request.nextUrl.pathname !== '/') {
+        console.log(`[Middleware] Email not allowed for userId ${userId}. Redirecting to /`);
+        return NextResponse.redirect(new URL('/', request.url));
+      } else {
+        console.log(`[Middleware] Email not allowed for userId ${userId}, but already at /. Allowing access to prevent loop.`);
+        // 既にホームページにいる場合はループを防ぐためにそのまま進める
+      }
     }
 
     // パブリックルートのチェックは、認証が必要ないルートに対して行うべきだが、
