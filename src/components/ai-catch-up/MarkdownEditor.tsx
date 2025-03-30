@@ -7,13 +7,22 @@ import type { Components } from "react-markdown";
 
 interface MarkdownEditorProps {
   maxLength?: number;
+  storageKey?: string;
 }
 
-export default function MarkdownEditor({ maxLength = 500 }: MarkdownEditorProps) {
+export default function MarkdownEditor({ maxLength = 500, storageKey = "markdown-notes" }: MarkdownEditorProps) {
   const [text, setText] = useState<string>("");
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [showHelp, setShowHelp] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // ローカルストレージからデータを読み込む
+  useEffect(() => {
+    const savedText = localStorage.getItem(storageKey);
+    if (savedText) {
+      setText(savedText);
+    }
+  }, [storageKey]);
 
   // テキストエリアの高さを動的に調整
   useEffect(() => {
@@ -23,10 +32,20 @@ export default function MarkdownEditor({ maxLength = 500 }: MarkdownEditorProps)
     }
   }, [text]);
 
+  // テキスト変更時にローカルストレージに保存
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
     if (newText.length <= maxLength) {
       setText(newText);
+      localStorage.setItem(storageKey, newText);
+    }
+  };
+
+  // メモをクリアする関数
+  const clearText = () => {
+    if (window.confirm("メモをクリアしてもよろしいですか？")) {
+      setText("");
+      localStorage.removeItem(storageKey);
     }
   };
 
@@ -64,6 +83,7 @@ export default function MarkdownEditor({ maxLength = 500 }: MarkdownEditorProps)
     
     if (newText.length <= maxLength) {
       setText(newText);
+      localStorage.setItem(storageKey, newText);
       
       // カーソル位置を調整
       setTimeout(() => {
@@ -159,14 +179,24 @@ export default function MarkdownEditor({ maxLength = 500 }: MarkdownEditorProps)
           <h3 className="text-lg font-medium text-gray-800">メモ</h3>
           <p className="text-sm text-gray-600">Markdown形式で入力できます</p>
         </div>
-        <button
-          onClick={toggleHelp}
-          className="p-2 text-gray-500 hover:text-blue-500 transition-colors"
-          aria-label="マークダウンヘルプ"
-          title="マークダウン記法のヘルプ"
-        >
-          <HelpCircle size={18} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={clearText}
+            className="p-2 text-gray-500 hover:text-red-500 transition-colors"
+            aria-label="メモをクリア"
+            title="メモをクリア"
+          >
+            <X size={18} />
+          </button>
+          <button
+            onClick={toggleHelp}
+            className="p-2 text-gray-500 hover:text-blue-500 transition-colors"
+            aria-label="マークダウンヘルプ"
+            title="マークダウン記法のヘルプ"
+          >
+            <HelpCircle size={18} />
+          </button>
+        </div>
       </div>
 
       <div className="p-4 relative">

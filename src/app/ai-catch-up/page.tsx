@@ -117,7 +117,7 @@ export default function AICatchUpPage() {
                 <p className="text-gray-600 mb-6">
                   タイムラインを見ながらメモを取れます (Markdown対応)。
                 </p>
-                <MarkdownEditor maxLength={500} />
+                <MarkdownEditor maxLength={500} storageKey="twitter-timeline-notes" />
               </div>
             </div>
             
