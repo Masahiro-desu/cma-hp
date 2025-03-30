@@ -12,6 +12,7 @@ const TWITTER_USERS = [
   "Google",
   "GeminiApp",
   "elonmusk",
+  "SuguruKun_ai",
 ];
 
 // Xのウィジェット用の型定義

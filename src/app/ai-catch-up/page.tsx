@@ -16,6 +16,7 @@ const TWITTER_USERS = [
   "Google",
   "GeminiApp",
   "elonmusk",
+  "SuguruKun_ai",
 ];
 
 export default function AICatchUpPage() {
