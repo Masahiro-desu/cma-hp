@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ClipboardCopy, Check, HelpCircle, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
 
 interface MarkdownEditorProps {
   maxLength?: number;
@@ -124,6 +125,32 @@ export default function MarkdownEditor({ maxLength = 500 }: MarkdownEditorProps)
 コードブロック
 \`\`\`
 `;
+
+  // Reactコンポーネントを定義
+  const components: Components = {
+    h1: ({...props}) => <h1 className="text-xl font-bold my-2" {...props} />,
+    h2: ({...props}) => <h2 className="text-lg font-semibold my-2" {...props} />,
+    h3: ({...props}) => <h3 className="text-md font-medium my-1" {...props} />,
+    p: ({...props}) => <p className="my-1" {...props} />,
+    ul: ({...props}) => <ul className="list-disc pl-5 my-2" {...props} />,
+    ol: ({...props}) => <ol className="list-decimal pl-5 my-2" {...props} />,
+    li: ({...props}) => <li className="my-0.5" {...props} />,
+    a: ({...props}) => <a className="text-blue-500 hover:underline" {...props} target="_blank" rel="noopener noreferrer" />,
+    blockquote: ({...props}) => <blockquote className="border-l-4 border-gray-200 pl-4 italic my-2" {...props} />,
+    code: ({className, children, ...props}) => {
+      const match = /language-(\w+)/.exec(className || "");
+      return match ? (
+        <code className="block bg-gray-100 rounded p-2 my-2 text-sm whitespace-pre-wrap" {...props}>
+          {children}
+        </code>
+      ) : (
+        <code className="bg-gray-100 rounded px-1 py-0.5 text-sm" {...props}>
+          {children}
+        </code>
+      );
+    },
+    pre: ({...props}) => <pre className="bg-gray-100 rounded p-2 my-2 text-sm overflow-auto" {...props} />,
+  };
 
   return (
     <div className="w-full bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
@@ -265,22 +292,7 @@ export default function MarkdownEditor({ maxLength = 500 }: MarkdownEditorProps)
         <div className="p-4 bg-gray-50 border-t border-gray-200">
           <h4 className="text-sm font-medium text-gray-700 mb-2">プレビュー:</h4>
           <div className="p-3 bg-white border border-gray-200 rounded-md prose prose-sm max-w-none overflow-auto">
-            <ReactMarkdown components={{
-              h1: ({...props}) => <h1 className="text-xl font-bold my-2" {...props} />,
-              h2: ({...props}) => <h2 className="text-lg font-semibold my-2" {...props} />,
-              h3: ({...props}) => <h3 className="text-md font-medium my-1" {...props} />,
-              p: ({...props}) => <p className="my-1" {...props} />,
-              ul: ({...props}) => <ul className="list-disc pl-5 my-2" {...props} />,
-              ol: ({...props}) => <ol className="list-decimal pl-5 my-2" {...props} />,
-              li: ({...props}) => <li className="my-0.5" {...props} />,
-              a: ({...props}) => <a className="text-blue-500 hover:underline" {...props} target="_blank" rel="noopener noreferrer" />,
-              blockquote: ({...props}) => <blockquote className="border-l-4 border-gray-200 pl-4 italic my-2" {...props} />,
-              code: ({inline, ...props}) => 
-                inline 
-                  ? <code className="bg-gray-100 rounded px-1 py-0.5 text-sm" {...props} />
-                  : <code className="block bg-gray-100 rounded p-2 my-2 text-sm whitespace-pre-wrap" {...props} />,
-              pre: ({...props}) => <pre className="bg-gray-100 rounded p-2 my-2 text-sm overflow-auto" {...props} />,
-            }}>
+            <ReactMarkdown components={components}>
               {text}
             </ReactMarkdown>
           </div>
@@ -311,22 +323,7 @@ export default function MarkdownEditor({ maxLength = 500 }: MarkdownEditorProps)
               <div className="prose prose-sm">
                 <h4 className="text-md font-medium mb-2">プレビュー</h4>
                 <div className="bg-gray-50 p-3 rounded overflow-auto">
-                  <ReactMarkdown components={{
-                    h1: ({...props}) => <h1 className="text-xl font-bold my-2" {...props} />,
-                    h2: ({...props}) => <h2 className="text-lg font-semibold my-2" {...props} />,
-                    h3: ({...props}) => <h3 className="text-md font-medium my-1" {...props} />,
-                    p: ({...props}) => <p className="my-1" {...props} />,
-                    ul: ({...props}) => <ul className="list-disc pl-5 my-2" {...props} />,
-                    ol: ({...props}) => <ol className="list-decimal pl-5 my-2" {...props} />,
-                    li: ({...props}) => <li className="my-0.5" {...props} />,
-                    a: ({...props}) => <a className="text-blue-500 hover:underline" {...props} target="_blank" rel="noopener noreferrer" />,
-                    blockquote: ({...props}) => <blockquote className="border-l-4 border-gray-200 pl-4 italic my-2" {...props} />,
-                    code: ({inline, ...props}) => 
-                      inline 
-                        ? <code className="bg-gray-100 rounded px-1 py-0.5 text-sm" {...props} />
-                        : <code className="block bg-gray-100 rounded p-2 my-2 text-sm whitespace-pre-wrap" {...props} />,
-                    pre: ({...props}) => <pre className="bg-gray-100 rounded p-2 my-2 text-sm overflow-auto" {...props} />,
-                  }}>
+                  <ReactMarkdown components={components}>
                     {markdownHelpText}
                   </ReactMarkdown>
                 </div>
