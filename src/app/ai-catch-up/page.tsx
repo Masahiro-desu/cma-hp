@@ -15,11 +15,15 @@ const TWITTER_USERS = [
   "shota7180",
   "Google",
   "GeminiApp",
+  "elonmusk",
 ];
 
 export default function AICatchUpPage() {
   const [selectedUser, setSelectedUser] = useState(TWITTER_USERS[0]);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  // テーマの切り替え
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -28,6 +32,7 @@ export default function AICatchUpPage() {
       <main className="flex-grow py-8">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
+            {/* ヘッダーセクション */}
             <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <h2 className="text-2xl font-semibold text-gray-800">
@@ -43,6 +48,7 @@ export default function AICatchUpPage() {
                   value={selectedUser}
                   onChange={(e) => setSelectedUser(e.target.value)}
                   className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="表示するユーザーを選択"
                 >
                   {TWITTER_USERS.map((user) => (
                     <option key={user} value={user}>
@@ -52,23 +58,24 @@ export default function AICatchUpPage() {
                 </select>
                 
                 <button
-                  onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                  onClick={toggleTheme}
                   className="px-3 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-100 transition-colors"
+                  aria-label={`${theme === "light" ? "ダーク" : "ライト"}モードに切り替え`}
                 >
                   {theme === "light" ? "ダークモード" : "ライトモード"}
                 </button>
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-              <UserTimeline 
-                username={selectedUser} 
-                theme={theme}
-                height={650}
-                limit={10}
-              />
-            </div>
+            {/* タイムラインセクション */}
+            <UserTimeline 
+              username={selectedUser} 
+              theme={theme}
+              height={650}
+              limit={10}
+            />
             
+            {/* 情報セクション */}
             <div className="mt-12 p-6 bg-blue-50 rounded-lg">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">
                 Xウィジェットについて
@@ -86,6 +93,7 @@ export default function AICatchUpPage() {
               </p>
             </div>
 
+            {/* メモセクション */}
             <div className="mt-12 mb-12">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">
                 メモを取る
