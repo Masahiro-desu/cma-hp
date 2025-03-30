@@ -82,7 +82,7 @@ export default function UserTimeline({
   return (
     <div className="w-full max-w-xl mx-auto rounded-lg overflow-hidden shadow-md">
       <div className="p-2 bg-blue-50 border-b border-blue-100">
-        <h3 className="font-medium text-blue-700">@{username}のタイムライン</h3>
+        <h3 className="font-medium text-blue-700">@{username}さんのタイムライン</h3>
       </div>
       <div ref={containerRef} className="bg-white">
         <div className="p-8 text-center text-gray-500">
