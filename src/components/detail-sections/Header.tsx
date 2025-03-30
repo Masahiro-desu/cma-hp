@@ -11,7 +11,14 @@ export default function Header({
   description = "AIに関連する最新情報をXのタイムラインから収集",
 }: HeaderProps) {
   return (
-    <header className="py-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <header 
+      className="py-6 text-white relative"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/x-logo-wide.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <div className="container mx-auto px-4">
         <Link
           href="/"

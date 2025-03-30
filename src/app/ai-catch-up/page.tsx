@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import dynamic from 'next/dynamic';
+import Image from "next/image";
 import Header from "@/components/detail-sections/Header";
 import Footer from "@/components/detail-sections/Footer";
 import MarkdownEditor from "@/components/ai-catch-up/MarkdownEditor";
-import { Twitter, ExternalLink, Search } from "lucide-react";
+import { ExternalLink, Search } from "lucide-react";
 
 // ユーザーリスト
 const TWITTER_USERS = [
@@ -20,8 +21,8 @@ const TWITTER_USERS = [
   "SuguruKun_ai",
 ];
 
-// Twitter検索URL生成関数
-const getTwitterSearchUrl = (username: string) => {
+// X(旧Twitter)検索URL生成関数
+const getXSearchUrl = (username: string) => {
   return `https://x.com/search?q=from%3A%40${username}&src=typed_query&f=live`;
 };
 
@@ -130,7 +131,7 @@ export default function AICatchUpPage() {
             {/* 情報セクション */}
             <div className="mt-12 p-6 bg-blue-50 rounded-lg">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                AI研究者・組織のX（Twitter）アカウント
+                AI研究者・組織のX アカウント
               </h3>
               <p className="text-gray-700 mb-5">
                 以下のリンクから各アカウントの投稿を直接確認できます。
@@ -140,13 +141,19 @@ export default function AICatchUpPage() {
                 {TWITTER_USERS.map((user) => (
                   <a 
                     key={user}
-                    href={getTwitterSearchUrl(user)}
+                    href={getXSearchUrl(user)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all hover:border-blue-300 group"
                   >
-                    <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                      <Twitter size={20} />
+                    <div className="flex-shrink-0 w-10 h-10 bg-white rounded-full flex items-center justify-center group-hover:bg-gray-100 transition-colors overflow-hidden">
+                      <Image 
+                        src="/images/x-logo.png" 
+                        alt="X Logo" 
+                        width={24} 
+                        height={24} 
+                        className="object-contain"
+                      />
                     </div>
                     <div className="flex-grow">
                       <p className="font-medium text-gray-800 group-hover:text-blue-600">@{user}</p>
@@ -162,7 +169,13 @@ export default function AICatchUpPage() {
               
               <div className="mt-6 pt-4 border-t border-gray-200">
                 <p className="text-gray-700 text-sm flex items-center gap-1.5">
-                  <Twitter size={16} className="text-blue-500" />
+                  <Image 
+                    src="/images/x-logo.png" 
+                    alt="X Logo" 
+                    width={16} 
+                    height={16} 
+                    className="object-contain"
+                  />
                   詳しくは<a 
                     href="https://developer.x.com/en/docs/x-for-websites" 
                     target="_blank" 
