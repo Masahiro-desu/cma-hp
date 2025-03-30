@@ -23,6 +23,10 @@ export default function RootLayout({
   return (
     <html lang="ja" suppressHydrationWarning>
       <head>
+        {/* X (Twitter) ウィジェット用リソースヒント */}
+        <link rel="preconnect" href="https://platform.x.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://platform.x.com" />
+        
         {/* Google Tag Manager */}
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
