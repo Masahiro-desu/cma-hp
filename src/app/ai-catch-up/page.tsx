@@ -4,6 +4,7 @@ import { useState } from "react";
 import Header from "@/components/detail-sections/Header";
 import Footer from "@/components/detail-sections/Footer";
 import UserTimeline from "@/components/ai-catch-up/UserTimeline";
+import MarkdownEditor from "@/components/ai-catch-up/MarkdownEditor";
 
 // ユーザーリスト（UserTimeline.tsxと同じリスト）
 const TWITTER_USERS = [
@@ -73,11 +74,9 @@ export default function AICatchUpPage() {
                 Xウィジェットについて
               </h3>
               <p className="text-gray-700">
-                このページでは、X (旧Twitter) のタイムラインウィジェットを使用してAI関連のアカウントの最新投稿を表示しています。
-                UIの切り替えや、表示するアカウントを選択することができます。
+                表示するアカウントを選択することができます。
               </p>
               <p className="text-gray-700 mt-3">
-                X Widget APIを利用すると、Webサイトに簡単にTwitterのコンテンツを埋め込むことができます。
                 詳しくは<a 
                   href="https://developer.x.com/en/docs/x-for-websites" 
                   target="_blank" 
@@ -85,6 +84,16 @@ export default function AICatchUpPage() {
                   className="text-blue-600 hover:underline"
                 >X開発者ドキュメント</a>をご覧ください。
               </p>
+            </div>
+
+            <div className="mt-12 mb-12">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                メモを取る
+              </h3>
+              <p className="text-gray-600 mb-6">
+                このセクションでは、タイムラインを閲覧しながらメモを取ることができます。メモはMarkdown形式で入力可能です。
+              </p>
+              <MarkdownEditor maxLength={500} />
             </div>
           </div>
         </div>
