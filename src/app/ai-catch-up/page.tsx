@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import Header from "@/components/detail-sections/Header";
 import Footer from "@/components/detail-sections/Footer";
 import MarkdownEditor from "@/components/ai-catch-up/MarkdownEditor";
+import { Twitter, ExternalLink, Search } from "lucide-react";
 
 // ユーザーリスト
 const TWITTER_USERS = [
@@ -18,6 +19,11 @@ const TWITTER_USERS = [
   "elonmusk",
   "SuguruKun_ai",
 ];
+
+// Twitter検索URL生成関数
+const getTwitterSearchUrl = (username: string) => {
+  return `https://x.com/search?q=from%3A%40${username}&src=typed_query&f=live`;
+};
 
 // UserTimelineを動的にインポート
 const UserTimeline = dynamic(
@@ -124,19 +130,50 @@ export default function AICatchUpPage() {
             {/* 情報セクション */}
             <div className="mt-12 p-6 bg-blue-50 rounded-lg">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                Xウィジェットについて
+                AI研究者・組織のX（Twitter）アカウント
               </h3>
-              <p className="text-gray-700">
-                表示するアカウントを選択することができます。
+              <p className="text-gray-700 mb-5">
+                以下のリンクから各アカウントの投稿を直接確認できます。
               </p>
-              <p className="text-gray-700 mt-3">
-                詳しくは<a 
-                  href="https://developer.x.com/en/docs/x-for-websites" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >X開発者ドキュメント</a>をご覧ください。
-              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {TWITTER_USERS.map((user) => (
+                  <a 
+                    key={user}
+                    href={getTwitterSearchUrl(user)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all hover:border-blue-300 group"
+                  >
+                    <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                      <Twitter size={20} />
+                    </div>
+                    <div className="flex-grow">
+                      <p className="font-medium text-gray-800 group-hover:text-blue-600">@{user}</p>
+                      <p className="text-xs text-gray-500 flex items-center gap-1">
+                        <Search size={12} /> 
+                        <span>投稿を見る</span>
+                      </p>
+                    </div>
+                    <ExternalLink size={16} className="text-gray-400 group-hover:text-blue-500" />
+                  </a>
+                ))}
+              </div>
+              
+              <div className="mt-6 pt-4 border-t border-gray-200">
+                <p className="text-gray-700 text-sm flex items-center gap-1.5">
+                  <Twitter size={16} className="text-blue-500" />
+                  詳しくは<a 
+                    href="https://developer.x.com/en/docs/x-for-websites" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline inline-flex items-center gap-1"
+                  >
+                    X開発者ドキュメント
+                    <ExternalLink size={12} />
+                  </a>をご覧ください。
+                </p>
+              </div>
             </div>
           </div>
         </div>
