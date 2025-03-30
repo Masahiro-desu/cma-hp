@@ -29,8 +29,7 @@ const publicRoutes = createRouteMatcher([
   "/privacy-policy(.*)",
   "/legal(.*)",
   "/how-others-use(.*)",
-  "/use-cases(.*)",
-  "/ai-catch-up(.*)"
+  "/use-cases(.*)"
 ]);
 
 // 実装済みルートのマッチャーを作成
@@ -57,4 +56,4 @@ export const config = {
     // APIルートは常に実行
     '/(api|trpc)(.*)',
   ],
-}; 
+};
